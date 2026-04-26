@@ -1,0 +1,57 @@
+name: Attach agency.clockless.ai custom domain
+
+# One-shot workflow that attaches agency.clockless.ai to the agency-website
+# Cloudflare Pages project and creates the DNS CNAME in the clockless.ai
+# zone. Idempotent — safe to re-run.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add agency.clockless.ai to Pages project
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: e330f4b157e45d92b8bf9264df243dd5
+        run: |
+          curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/agency-website/domains" \
+            -H "Authorization: Bearer $CF_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"name":"agency.clockless.ai"}' | tee /tmp/domain-attach.json
+          # Success, already-exists (code 8000009), or "domain already attached" all fine.
+
+      - name: Find clockless.ai zone id (try account-scoped)
+        id: zone
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT_ID: e330f4b157e45d92b8bf9264df243dd5
+        run: |
+          echo "--- try /zones?name=clockless.ai ---"
+          curl -sS "https://api.cloudflare.com/client/v4/zones?name=clockless.ai" \
+            -H "Authorization: Bearer $CF_TOKEN" | tee /tmp/z1.json
+          echo ""
+          echo "--- try /zones?account.id=ACCOUNT_ID&name=clockless.ai ---"
+          curl -sS "https://api.cloudflare.com/client/v4/zones?account.id=$ACCOUNT_ID&name=clockless.ai" \
+            -H "Authorization: Bearer $CF_TOKEN" | tee /tmp/z2.json
+          echo ""
+          ZONE_ID=$(jq -r '.result[0].id // empty' /tmp/z1.json)
+          if [ -z "$ZONE_ID" ]; then
+            ZONE_ID=$(jq -r '.result[0].id // empty' /tmp/z2.json)
+          fi
+          echo "Found zone: '$ZONE_ID'"
+          echo "zone_id=$ZONE_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Create CNAME agency → agency-website.pages.dev
+        if: steps.zone.outputs.zone_id != ''
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ZONE_ID: ${{ steps.zone.outputs.zone_id }}
+        run: |
+          curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
+            -H "Authorization: Bearer $CF_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"type":"CNAME","name":"agency","content":"agency-website.pages.dev","proxied":true,"ttl":1}' | tee /tmp/dns-create.json
