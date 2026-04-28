@@ -1,9 +1,9 @@
-// Landing-page floating chat bubble — demo-only, no backend.
+// Landing-page floating chat bubble — squared blackout pill, demo-only, no backend.
 (function () {
   const STRINGS = {
     en: {
       title: "Aperture & Ink",
-      sub: "Brooklyn Studio · Usually replies within the hour",
+      sub: "Brooklyn studio · Usually replies within the hour",
       greeting: "Hi! I'm Reese. Aperture & Ink builds brand identity systems, packaging, and launch campaigns for founder-led brands. Ask me anything — scope, timelines, what the portal looks like, how we run a launch.",
       placeholder: "Type a message…",
       replies: [
@@ -13,8 +13,9 @@
         "I usually have a studio walk-through slot on Friday afternoons. Want me to save you one?",
         "Production, color proofs, and final deliverable approval are where 95% of launch stress happens. We track every revision in the portal so nothing slips.",
       ],
-      closeLabel: "Close chat",
-      openLabel: "Open chat with the studio",
+      closeLabel: "Close studio line",
+      openLabel: "Open studio line",
+      buttonLabel: "Studio",
     },
     zh: {
       title: "Aperture & Ink",
@@ -28,8 +29,9 @@
         "周五下午我一般都有一个工作室走访时段。要不要帮你预留一个？",
         "生产、色稿、最终交付物签字是 95% 上线压力的来源。我们把每一轮修改都记在门户里，不会漏掉一项。",
       ],
-      closeLabel: "关闭聊天",
-      openLabel: "打开与工作室的聊天",
+      closeLabel: "关闭工作室对话",
+      openLabel: "打开工作室对话",
+      buttonLabel: "工作室",
     },
   };
 
@@ -41,12 +43,12 @@
     return STRINGS[currentLang()];
   }
 
-  // Build DOM once, toggle visibility / language on demand.
   const host = document.createElement("div");
   host.className = "studio-chat";
   host.innerHTML = `
     <button class="studio-chat__bubble" type="button" aria-label="" data-role="toggle">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span data-role="button-label">Studio</span>
     </button>
     <div class="studio-chat__panel" role="dialog" aria-hidden="true">
       <header class="studio-chat__head">
@@ -56,7 +58,7 @@
           <span data-role="sub"></span>
         </div>
         <button class="studio-chat__close" type="button" aria-label="" data-role="close">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg>
         </button>
       </header>
       <div class="studio-chat__scroll" data-role="scroll"></div>
@@ -79,12 +81,11 @@
   const sendBtn = $('[data-role="send"]');
   const titleEl = $('[data-role="title"]');
   const subEl = $('[data-role="sub"]');
+  const buttonLabelEl = $('[data-role="button-label"]');
 
   let replyIdx = 0;
   let busy = false;
-  // Track messages in both languages so we can re-render on language change
-  // without losing the conversation.
-  const history = []; // { role: 'agent'|'user', body: { en, zh } }
+  const history = [];
 
   function renderHistory() {
     const lang = currentLang();
@@ -104,12 +105,12 @@
     titleEl.textContent = s.title;
     subEl.textContent = s.sub;
     input.placeholder = s.placeholder;
+    buttonLabelEl.textContent = s.buttonLabel;
     toggleBtn.setAttribute(
       "aria-label",
       panel.classList.contains("is-open") ? s.closeLabel : s.openLabel,
     );
     closeBtn.setAttribute("aria-label", s.closeLabel);
-    // Ensure at least the greeting is in history.
     if (history.length === 0) {
       history.push({
         role: "agent",
@@ -147,13 +148,10 @@
     }) - 1;
     renderHistory();
     setTimeout(() => {
-      const replies = STRINGS[currentLang()].replies;
       const en = STRINGS.en.replies[replyIdx % STRINGS.en.replies.length];
       const zh = STRINGS.zh.replies[replyIdx % STRINGS.zh.replies.length];
       replyIdx += 1;
       history[typingIdx] = { role: "agent", body: { en, zh } };
-      // Ensure we use current lang
-      void replies;
       renderHistory();
       busy = false;
     }, 900);
@@ -167,7 +165,6 @@
     }
   });
 
-  // React to language toggles triggered by site.js.
   const observer = new MutationObserver(() => refreshLanguage());
   observer.observe(document.documentElement, {
     attributes: true,

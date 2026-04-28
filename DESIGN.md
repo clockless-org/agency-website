@@ -1,99 +1,222 @@
-# Aperture & Ink — Design
+# Aperture & Ink — Design ("The Studio Manifesto")
 
-**North star:** Warm, calm, senior creative studio — built on the
-`ray-website` visual kit (CLO-41 fork) with bilingual content and a
-demo-grade portal. The design system is preserved as the template's
-agency-vertical migration; visual language is shared with the Ray template.
+## North star
 
-## Reference sites
+**Typographic-poster + risograph color-block.** Type *is* the artwork. The
+page is a brand book that became a website. Aperture & Ink stops being a
+template fork and starts being a one-of-a-kind voice in the family of
+Clockless industry verticals.
 
-- **Primary template:** ray-website (direct lift of the layout and most CSS;
-  forked for CLO-41 agency-vertical migration).
-- **Secondary:** independent Brooklyn / Manhattan studio sites for tone cues
-  (Pentagram, Mucca, etc.).
+The site reads as a manifesto wall in W+K's reception, a Pentagram Papers
+monograph, and a DUMBO risograph zine — all at once.
 
-## Color palette
+## Reference voices
 
-| Token | Hex | Role |
-|---|---|---|
-| `--bg` | `#f7f2eb` | Surface cream |
-| `--bg-strong` | `#ede2d1` | Surface deep |
-| `--surface` | `#fffdf9` | Paper-white card |
-| `--text` | `#2a231f` | Ink (deep warm brown) |
-| `--muted` | `#786c60` | Secondary text |
-| `--green` | `#1d3a30` | Primary forest green (CTA + deep sections) |
-| `--green-soft` | `#29463a` | Hover variant |
-| `--gold` | `#b58a5d` | Bronze accent (View Portal CTA, links) |
-| `--peach` | `#dccbbb` | Warm accent block |
-| `--mint` | `#dce7d8` | Cool accent block |
+- **Pentagram** — brand-book monographs, mono-font case study indices,
+  white-or-black field with one accent.
+- **Wieden+Kennedy** — manifesto walls, oversized hand-painted slogans,
+  copy-as-art.
+- **DUMBO indie studio scene** — risograph print culture, color-block
+  posters, mixed type voice.
+
+## Family map (vs other Clockless industries)
+
+| Industry | Family | Display | Body | Mono | Surface | Signature |
+|---|---|---|---|---|---|---|
+| Accounting (CLO-49) | editorial-print 报刊 | Newsreader | Inter | IBM Plex Mono | warm vellum | masthead + tax calendar |
+| Finance (CLO-71) | editorial-print 私人信 | Source Serif 4 | Inter | IBM Plex Mono | warm vellum | concentration horizon + memo chat |
+| Insurance (CLO-53) | engineering-drafting 工程图 | Instrument Serif | IBM Plex Sans | JetBrains Mono | cool blueprint | isometric + transmittal |
+| **Agency (this)** | **typographic-poster + riso** | **Bricolage Grotesque** | **Bricolage Grotesque** | **Geist Mono** | **paper + bleed-out blackout** | **mega type + marquee + lime/magenta** |
+
+## Color tokens
+
+```
+--paper:       #F1EDE3   /* warm newsprint */
+--paper-deep:  #E6DFCF   /* tonal step */
+--blackout:    #0A0A0A   /* full-bleed dark, signature reel */
+--ink:         #0A0A0A   /* primary text */
+--ink-soft:    #4A453E   /* secondary text only */
+
+--lime:        #D7FF00   /* primary accent */
+--magenta:     #FF2E6F   /* secondary accent, sparingly */
+
+--rule:        #1F1F1F   /* hairline only, 1px */
+
+--on-blackout-fg:    #F1EDE3
+--on-blackout-muted: #8B8579
+```
+
+**Hard rules:**
+
+- Only those tokens. **No gradients. No shadows. No `rgba()` overlays
+  except `--rule`.**
+- Lime and magenta are mutually exclusive on a single component. A button
+  is lime *or* magenta, not both.
+- Old palette tokens (`--green`, `--gold`, `--peach`, `--mint`,
+  `--surface-green-*`, `#1d3a30`, `#b88354`, `#f7f2ea`, `#fffdf9`) are
+  deleted, not aliased.
 
 ## Typography
 
-- **Display:** Cormorant Garamond (weights 500/600/700).
-- **Body & UI:** Manrope (400/500/700/800).
-- Display sizes on hero: `clamp(2.8rem, 10vw, 3.6rem)` on mobile, larger
-  on desktop.
-- Eyebrows are uppercase sans with 0.18em letter-spacing.
+```
+--font-display: "Bricolage Grotesque" (variable, opsz 12-96, wght 400-800)
+--font-body:    "Bricolage Grotesque" (lower opsz)
+--font-mono:    "Geist Mono"
+```
 
-## Layout rules
+The variable opsz axis on Bricolage covers everything from 12px legal copy
+to 200px hero — same family does small body and giant manifesto headline.
+The third voice is **mono**, used for production callouts: case study
+indices, runtimes, deadlines, project codes.
 
-- Sharp corners on cards (radius 0). Curves reserved for avatars,
-  archways, and step dots.
-- Full-viewport archway hero with Reese's portrait on right, copy on left.
-- Sections alternate between `--bg`, `--surface`, and `--bg-strong` for
-  tonal depth; never rely on flat borders as dividers.
-- Mobile: nav loses the secondary "Start a Project" button, keeps the
-  accent "View Portal" + language toggle. Section padding 72px vertical.
+| Role | Font | weight | size | tracking |
+|---|---|---|---|---|
+| Hero H1 | Bricolage opsz 96 | 800 | clamp(4rem, 12vw, 11rem) | -0.04em |
+| Section H2 | Bricolage opsz 72 | 700 | clamp(2.4rem, 6vw, 5.2rem) | -0.03em |
+| H3 | Bricolage opsz 36 | 700 | clamp(1.4rem, 3vw, 2.2rem) | -0.02em |
+| Body | Bricolage opsz 14 | 400 | 1rem | -0.005em |
+| Eyebrow | Geist Mono | 500 | 0.72rem | 0.18em uppercase |
+| Marquee | Bricolage opsz 96 | 800 | clamp(3rem, 8vw, 7rem) | -0.03em uppercase |
 
-## Motion
+**Italics:** Bricolage has no italic. Emphasis uses `<em>` rendered as a
+**lime underline** (text-decoration-thickness: 0.18em).
 
-- Scroll-reveal animation on text + cards (translateY ~28px, easing
-  `cubic-bezier(0.16, 1, 0.3, 1)`).
-- Hero fade-in (no translate) on first paint.
-- Chat bubble: subtle pop on appear, scale hover.
+## Layout & composition
 
-## Imagery — gradient blocks, no stock photography
+- **12-column** grid. Container width 1180px. Body copy stays inside;
+  hero, marquee, and case-study covers overflow `.container`.
+- **Sharp edges.** `border-radius: 0` everywhere except `.lang-toggle`
+  (single 999px pill, intentional contrast).
+- **Hairlines, not cards.** `1px solid var(--rule)` for separators. **No
+  `box-shadow` anywhere.**
+- **Bleed-out sections.** At least three sections per page go full-bleed
+  (margin-trimmed): the marquee, the blackout reel, and the contact CTA.
+- **Section rhythm — paper / blackout alternation.** Every public page
+  contains at least one `.blackout` section. Stats and CTA are blackout;
+  hero, services, and testimonial are paper.
+- **Spacing.** Vertical section padding `clamp(96px, 12vw, 184px)`.
+  Internal block gap `clamp(24px, 3vw, 56px)`.
+- **No card chrome.** `.service-card` is replaced by `.poster-tile`:
+  full-bleed background (`--lime` / `--magenta` / `--blackout`), oversized
+  mono index, H2-scale service title, single-line copy, lime arrow link.
 
-- **No stock photography.** Every photo-shaped block is replaced by a
-  layered gradient (`forest-green → mint → bronze` palette). Reason: a
-  fictional creative studio with stock product shots reads as fake
-  immediately. Gradient blocks read as "design system primitives" instead.
-- **Portraits** are gradient + Cormorant Garamond monogram blocks (`RO`
-  for Reese, `PA` `JW` `SH` `DM` for the team). Reason: avoids "same face,
-  two fictional personas" failure mode and aligns with how Pentagram /
-  Mucca / Brand New present their senior team.
-- **Service art** uses three named gradient tones: `green` (forest
-  identity), `bronze` (packaging warmth), `mint` (campaign cool).
+## Imagery primitives — CSS only, no photo files
 
-## Iconography
+**No stock photography. No gradient blocks. No SVG illustrations of
+houses, archways, or geometric flourishes.** Three primitives:
 
-- None in the brand. Use serif numerals and letter badges for step
-  markers and team avatars.
+- **Halftone portrait** (`.halftone-portrait`): rectangular 4:5 frame,
+  radial-gradient halftone dots over a solid `--lime` / `--magenta` /
+  `--paper-deep` field, monogram in heavy Bricolage on top with
+  `mix-blend-mode: multiply`.
+- **Riso swatch tile** (`.riso-swatch`): solid color block with a mono
+  code label in the corner (`MARK 01 / WORK NO. 04 / SWATCH C`),
+  misregistration effect via 2px translate of a duplicated label.
+- **Type-as-image case-study cover** (`.case-cover`): brand name set in
+  200px Bricolage against `--blackout` or `--magenta`, mono index
+  (`CASE 01`) in the corner. Zero photographic content.
 
-## Language
+## Motion primitives — three motion grammars
 
-- Bilingual (zh / en), toggled via `data-en` / `data-zh` attributes
-  swapped by `/site.js`. localStorage key: `agency-lang`.
-- Default language respects `navigator.language`; stored in localStorage.
+- **Marquee** (`.marquee` / `.marquee__track`): infinite horizontal
+  scroll, 28s linear, uppercase Bricolage 800 with lime accent. Always
+  present in three places: under the hero, before the footer, in the
+  portal's `WHAT'S RUNNING` panel. Pure CSS keyframes; site.js duplicates
+  the children once for seamless looping.
+- **Reveal-block** (`.reveal-block` / `.reveal-block::before`): on
+  `IntersectionObserver` intersect, a solid color block wipes left-to-
+  right behind the section, then text fades in. Replaces `translateY(28px)`
+  scroll-reveal entirely.
+- **Cursor-tracked label** (case studies + portal Wall tiles): on hover, a
+  12-character mono label follows the cursor offset by 16px.
 
-## Per-feature conventions
+`prefers-reduced-motion: reduce` collapses all three: marquee freezes,
+wipe is instant, cursor label is static at center.
 
-- **Chat bubble:** dark green circle, white SVG message icon — matches
-  the portal's chat bubble exactly. Namespace: `studio-chat`.
-- **"Meet Reese" section:** quote + signature only (portrait lives in
-  hero, not duplicated here). BEM namespace: `meet-creative`.
-- **Stats band:** forest green background with cream serif numbers.
-- **Portal tab IDs:** `journey | deliverables | brand | schedule | billing
-  | documents | messages` (renamed from Ray's `properties / neighborhood
-  / payments` to agency semantics; internal IDs match user-facing labels
-  to avoid Ray-residue leakage).
+## Portal visual language (Studio Manifesto)
 
-## Don't
+The portal is the same brand book applied to a working tool. Same
+two-font system, same lime/magenta riso, same paper/blackout alternation.
 
-- Don't add emojis in client-facing copy.
-- Don't use rounded corners on cards.
-- Don't use blue accents.
-- Don't duplicate the portrait across multiple hero blocks on the same
-  page.
-- Don't reintroduce stock photography or `/media/*.jpg` references —
-  gradient blocks are intentional, not a placeholder.
+| Tab | Treatment |
+|---|---|
+| `journey` (Runsheet) | Hairline-ruled production schedule. Each step is one row: mono index + tag + H3 title + mono date + status pill. Current row goes blackout reverse-out. No dots, no gradients. |
+| `deliverables` (Work Wall) | Riso swatch tiles, each = one deliverable, mono filename, lime/magenta/blackout/paper-deep field, type-as-image cover. |
+| `brand` (Mark) | Single-page brand book spread: wordmark in 6 states (paper / lime / magenta / blackout / paper-deep / inverse), 4 stats on blackout, 6 voice cards in 2-col grid. |
+| `schedule` (Calendar) | Wide horizontal grid, hairlines only, key dates highlighted lime/magenta, mono day-number labels. |
+| `billing` (Statement) | Single tabular mono ledger: date / description / status pill / amount. Hairline rules between rows. Lime balance line at the bottom. No card chrome. |
+| `documents` (File Room) | Mono filename, deliverable type tag, lime/magenta status pill (`SIGNED` / `PENDING`). |
+| `messages` (Studio Line) | Slack-style monospaced thread, no rounded bubbles. Sender names in mono uppercase, timestamps in `--ink-soft`. My messages right-aligned with thin lime right-border, theirs left-aligned with thin magenta left-border. |
+
+**`WHAT'S RUNNING` panel** (always-visible top of portal): full-bleed
+`--blackout`, mono eyebrow `WHAT'S RUNNING`, H1-scale current task in
+lime, mono deadline with marquee underneath listing the next three
+actions. This is the **signature portal moment** — should look like a wall
+in W+K's reception.
+
+**Floating chat bubble (`.chat-bubble` / `.studio-chat__bubble`):**
+squared blackout pill labeled `STUDIO` in mono lime. No rounded corners.
+Magenta outline on hover. Replaces the dark green circle entirely.
+
+## Bilingual / CJK behavior
+
+- `data-en` / `data-zh` toggling preserved exactly, swapped via
+  `/src/scripts/site.js`. localStorage key `agency-lang`.
+- Font stack falls through `Bricolage Grotesque → PingFang SC → Hiragino
+  Sans GB → Microsoft YaHei → system-ui`. Bricolage has no CJK glyphs;
+  CJK falls to PingFang/Hiragino. The scale and weight carry the family
+  identity, not the latin glyph forms.
+- For ZH hero H1, weight 800 + tracking -0.04em looks heavier than
+  expected. `[lang="zh"] h1` resets letter-spacing to `-0.02em`.
+- Mono labels in marquees stay latin even in ZH mode (these are
+  production codes, not body copy).
+
+## Don't (anti-patterns from the Ray-fork era)
+
+- **No** Cormorant Garamond, Manrope, or Instrument Sans.
+- **No** archway hero, no `.portrait-arch`, no `.roundel`, no
+  `.monogram` 6rem circles.
+- **No** `box-shadow` declarations.
+- **No** gradients (`linear-gradient`, `radial-gradient`) — the only
+  exception is the radial-gradient *halftone dot pattern* used inside
+  `.halftone-portrait` (1px-radius dot on transparent), which renders as
+  print, not gradient.
+- **No** `border-radius` ≥ 4rem outside `.lang-toggle`.
+- **No** scroll-reveal `translateY(28px)`; use `.reveal-block` color wipe.
+- **No** old palette: `#1d3a30` / `#b88354` / `#dccbbb` / `#dce7d8` /
+  `#f7f2ea` / `#fffdf9` / `--green` / `--gold` / `--peach` / `--mint` /
+  `--surface-green*`.
+- **No** stock photography or photo files in `public/`. Only `favicon.svg`
+  and `icons.svg`.
+- **No** mid-sentence emoji in client copy. (Pull-quotes use lime
+  underline `<em>` instead.)
+
+## File map
+
+- `src/styles/site.css` — all design tokens, primitives, public-page CSS,
+  studio-chat (used by both landing and portal).
+- `src/scripts/site.js` — language toggle, marquee duplication, reveal-
+  block IntersectionObserver, contact form (demo).
+- `src/portal/portal.css` — portal shell (running panel, header, tabs,
+  footer, chat).
+- `src/portal/dashboard.css` — per-tab layouts (runsheet, work wall,
+  mark, calendar, statement, file room, studio line).
+- `src/portal/Dashboard.tsx` — bilingual data + tab views.
+- `src/portal/ChatBubble.tsx` — squared blackout `STUDIO` pill.
+- `public/chat.js` — landing-page chat bubble (mirror of the portal one).
+
+## Fallback direction (`The Studio Catalog`)
+
+If the chairman pivots to the Pentagram-house quiet variant, the swap is
+isolated to `:root` tokens and the Google Fonts import:
+
+```
+--lime   → --ink-blue: #002FA7  (Klein blue)
+--magenta → drop entirely
+--font-display / --font-body → Inter at extreme weights (Inter 900 +
+                                Inter Tight)
+--font-mono → keep Geist Mono
+```
+
+No structural rework needed. Marquee removed, blackout retained, type-as-
+object hero retained.

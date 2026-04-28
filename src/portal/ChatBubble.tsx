@@ -15,23 +15,23 @@ interface LocalMsg {
 }
 
 const SEED_MESSAGES: LocalMsg[] = [
-  { id: 's-1', role: 'agent', text: 'Hi Camilla, hi Jonah — welcome to the portal. Brand Guidelines v1.0 is in your Documents tab for sign-off by Friday. Anything you want to walk through before our Wednesday production review?', createdAt: new Date().toISOString() },
+  { id: 's-1', role: 'agent', text: 'Hi Camilla, hi Jonah — welcome to the portal. Brand Guidelines v1.0 is in your File Room for sign-off by Friday. Anything you want to walk through before our Wednesday production review?', createdAt: new Date().toISOString() },
 ]
 
 const CANNED_REPLIES = [
-  "Good question — take a look at the Billing tab for the production milestone breakdown. I'll walk you through it live on Wednesday.",
+  "Good question — take a look at the Statement tab for the production milestone breakdown. I'll walk you through it live on Wednesday.",
   "Totally normal. First-launch jitters always show up around production. You're in good shape — color proof passed, regulatory back panel cleared.",
   "I'll send Sarah a ping to confirm the photo-shoot day call time. She's your producer of record.",
   "Yes — you can log in from any device once master files transfer. For now, this is the shared link for both of you.",
 ]
 
 /**
- * Demo chat bubble. The real portal wires this to a backend; here it runs
- * entirely client-side with canned responses so the demo is fully static.
+ * Demo chat bubble — squared blackout pill labeled STUDIO. The real portal
+ * wires this to a backend; here it runs entirely client-side with canned
+ * responses so the demo is fully static.
  */
 export default function ChatBubble({ tenant }: ChatBubbleProps) {
   const agentName = tenant?.agent_name || 'Reese'
-  const agentAvatar = tenant?.agent_avatar_url || null
   const agentInitial = (tenant?.agent_name || 'R').charAt(0).toUpperCase()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<LocalMsg[]>(SEED_MESSAGES)
@@ -72,25 +72,22 @@ export default function ChatBubble({ tenant }: ChatBubbleProps) {
       <button
         className="chat-bubble"
         onClick={() => setOpen(o => !o)}
-        aria-label={open ? 'Close chat' : 'Open chat'}
+        aria-label={open ? 'Close studio line' : 'Open studio line'}
         aria-expanded={open}
       >
         {open ? (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg>
         ) : (
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         )}
+        <span className="chat-bubble__label">Studio</span>
       </button>
 
       {open && (
         <div className="chat-panel" role="dialog" aria-label={`Chat with ${agentName}`}>
           <header className="chat-panel-head">
             <div className="chat-panel-head-avatar" aria-hidden>
-              {agentAvatar ? (
-                <img src={agentAvatar} alt={agentName} referrerPolicy="no-referrer" />
-              ) : (
-                <span>{agentInitial}</span>
-              )}
+              <span>{agentInitial}</span>
             </div>
             <div>
               <div className="chat-panel-title">{agentName}</div>
@@ -121,7 +118,7 @@ export default function ChatBubble({ tenant }: ChatBubbleProps) {
               className="chat-send"
               aria-label="Send"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg>
             </button>
           </footer>
         </div>

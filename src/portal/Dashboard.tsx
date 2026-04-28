@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { PortalMember, PortalTenantIdentity } from './api'
 import './dashboard.css'
 
@@ -18,40 +18,52 @@ function tl(lang: Lang, v: string | TL): string {
 }
 
 const T = {
-  'demo.pill': { en: 'Demo', zh: '演示' },
+  'demo.pill': { en: 'DEMO', zh: '演示' },
   'back.site': { en: 'Back to site', zh: '返回主站' },
   'call': { en: 'Call', zh: '通话' },
   'header.tagline': {
     en: 'A calm, senior creative team for your launch — every brief, revision, and approval tracked in this portal.',
     zh: '一支从容、资深的创意团队为你的上线而工作——每一份 brief、每一轮修改、每一次签字都记录在这个门户里。',
   },
-  'tab.journey': { en: 'Journey', zh: '旅程' },
-  'tab.deliverables': { en: 'Deliverables', zh: '交付物' },
-  'tab.brand': { en: 'Brand', zh: '品牌' },
-  'tab.schedule': { en: 'Schedule', zh: '日程' },
-  'tab.billing': { en: 'Billing', zh: '账单' },
-  'tab.documents': { en: 'Documents', zh: '文件' },
-  'tab.messages': { en: 'Messages', zh: '消息' },
-  'journey.eyebrow': { en: 'Your build', zh: '你的建设过程' },
-  'journey.title.suffix': { en: '’s path to launch', zh: ' 通往上线的那段路' },
-  'journey.subtitle': { en: 'From the kickoff brief to the launch window — every step, in one place.', zh: '从立项 brief 到上线窗口——每一步，集中在一处。' },
+  'tab.journey': { en: 'Runsheet', zh: 'Runsheet' },
+  'tab.deliverables': { en: 'Work Wall', zh: 'Work Wall' },
+  'tab.brand': { en: 'Mark', zh: 'Mark' },
+  'tab.schedule': { en: 'Calendar', zh: 'Calendar' },
+  'tab.billing': { en: 'Statement', zh: 'Statement' },
+  'tab.documents': { en: 'File Room', zh: 'File Room' },
+  'tab.messages': { en: 'Studio Line', zh: 'Studio Line' },
+  'running.eyebrow': { en: "WHAT'S RUNNING", zh: 'WHAT’S RUNNING' },
+  'running.current': {
+    en: 'Final packaging review · Tide & Tonic Day 18',
+    zh: '包装最终审阅 · Tide & Tonic 第 18 天',
+  },
+  'running.deadline': {
+    en: 'DUE 04 / 22 · 10:00 AM ET',
+    zh: '截止 04 / 22 · 10:00 ET',
+  },
+  'running.next': { en: 'NEXT THREE', zh: '接下来三步' },
+  'journey.eyebrow': { en: 'The Runsheet', zh: '生产排程' },
+  'journey.title.suffix': { en: ' — production schedule', zh: ' — 生产排程' },
+  'journey.subtitle': { en: 'From the kickoff brief to the launch window — every step, on the same wall.', zh: '从立项 brief 到上线窗口——每一步，集中在同一面墙上。' },
   'journey.complete': { en: '% complete', zh: '% 已完成' },
   'journey.of': { en: 'of', zh: '/' },
   'journey.stages.done': { en: 'stages done · Now:', zh: '阶段已完成 · 当前：' },
-  'journey.current': { en: 'Current stage', zh: '当前阶段' },
-  'deliverables.title': { en: 'Deliverables', zh: '交付物' },
+  'journey.current': { en: 'CURRENT', zh: '当前' },
+  'journey.done': { en: 'DONE', zh: '完成' },
+  'journey.upcoming': { en: 'NEXT', zh: '后续' },
+  'deliverables.title': { en: 'Work Wall', zh: '作品墙' },
   'deliverables.subtitle': { en: 'Every artifact in the engagement — what stage it sits at, who owns it, and what the next gate is.', zh: '本次合作中的每一件交付物——它处于哪个阶段、由谁负责，以及下一个签字节点是什么。' },
-  'brand.title': { en: 'The Brand World', zh: '品牌世界' },
-  'brand.subtitle': { en: 'Tide & Tonic’s positioning, voice, and visual system &mdash; the language we built around the product so every channel speaks the same way.', zh: 'Tide & Tonic 的定位、语调与视觉系统——围绕产品建立的一套语言，让每一条渠道都用同样的方式说话。' },
+  'brand.title': { en: 'The Mark', zh: '品牌符号' },
+  'brand.subtitle': { en: 'Tide & Tonic’s positioning, voice, and visual system — the language we built around the product so every channel speaks the same way.', zh: 'Tide & Tonic 的定位、语调与视觉系统——围绕产品建立的一套语言，让每一条渠道都用同样的方式说话。' },
   'brand.hero.caption': { en: 'Tide & Tonic — small-batch RTD craft cocktails, born in Brooklyn', zh: 'Tide & Tonic — 在布鲁克林诞生的小批量预调精酿鸡尾酒' },
-  'schedule.title': { en: 'Schedule', zh: '日程' },
+  'schedule.title': { en: 'Calendar', zh: '日程' },
   'schedule.subtitle': { en: 'What’s on the calendar between now and the post-launch debrief.', zh: '从现在到上线后复盘之间，日历上有些什么。' },
-  'billing.title': { en: 'Billing', zh: '账单' },
+  'billing.title': { en: 'Statement', zh: '账单' },
   'billing.paid': { en: 'paid', zh: '已付款' },
-  'billing.pending': { en: 'pending. Every milestone draw and reimbursable, in one view.', zh: '待付款。每一笔阶段付款和代垫报销，都在一个视图里。' },
-  'documents.title': { en: 'Documents', zh: '文件' },
-  'documents.subtitle': { en: 'Everything signed, sent for approval, or shared &mdash; always in one place.', zh: '所有已签署、已送签或已共享的文件——始终集中在一处。' },
-  'messages.title': { en: 'Messages', zh: '消息' },
+  'billing.pending': { en: 'pending. Every milestone draw and reimbursable, in one ledger.', zh: '待付款。每一笔阶段付款和代垫报销，都在一个账本里。' },
+  'documents.title': { en: 'File Room', zh: '文件室' },
+  'documents.subtitle': { en: 'Everything signed, sent for approval, or shared — always in one place.', zh: '所有已签署、已送签或已共享的文件——始终集中在一处。' },
+  'messages.title': { en: 'Studio Line', zh: '工作室对话' },
   'messages.subtitle': { en: 'Your shared thread with the studio. Use the chat bubble for faster questions.', zh: '你和工作室的共享消息线。要问得更快，用右下角的聊天气泡。' },
   'addcal': { en: 'Add to calendar', zh: '加入日历' },
   'download': { en: 'Download', zh: '下载' },
@@ -81,7 +93,6 @@ type TabId = 'journey' | 'deliverables' | 'brand' | 'schedule' | 'billing' | 'do
 
 type StageContent =
   | { kind: 'info-grid'; rows: { label: TL; value: TL; emphasis?: 'success' | 'warning' | 'accent' }[] }
-  | { kind: 'listings'; items: { title: string; subtitle: string; rounds: number; revs: number; sku: number; status?: TL; tone: 'green' | 'bronze' | 'mint' }[] }
   | { kind: 'documents'; items: { name: TL; size: TL; action?: boolean }[] }
   | { kind: 'checklist'; items: { label: TL; done: boolean; sub?: TL }[] }
   | { kind: 'actions'; buttons: { labelKey: TKey; primary?: boolean; href?: string }[] }
@@ -96,7 +107,6 @@ interface Stage {
   dateLabel: TL
   summary: TL
   content: StageContent[]
-  tone?: 'green' | 'bronze' | 'mint'
 }
 
 const STAGES: Stage[] = [
@@ -145,7 +155,6 @@ const STAGES: Stage[] = [
     status: 'done',
     dateLabel: { en: 'Nov 2025', zh: '2025 年 11 月' },
     summary: { en: 'Three defendable routes. Route 1 leaned heritage-Italian, route 2 leaned Brooklyn-modern, route 3 leaned playful-illustration. Each had a real thesis behind it.', zh: '三条都站得住的路线。路线 1 偏意式传承、路线 2 偏布鲁克林现代、路线 3 偏俏皮插画。每条路线背后都有真实可辩护的命题。' },
-    tone: 'green',
     content: [
       { kind: 'info-grid', rows: [
         { label: { en: 'Route 1 — &ldquo;Aperitivo&rdquo;', zh: '路线 1 —「Aperitivo」' }, value: { en: 'Heritage-Italian, dinner-table seriousness', zh: '意式传承，晚餐桌的庄重感' } },
@@ -166,11 +175,10 @@ const STAGES: Stage[] = [
     status: 'done',
     dateLabel: { en: 'Dec 2025', zh: '2025 年 12 月' },
     summary: { en: 'Selected route 2 sharpened: type stack locked, color palette narrowed to four core tones, photography direction approved.', zh: '路线 2 被进一步锐化：字体堆栈锁定、色彩缩到四个核心色调、摄影方向通过。' },
-    tone: 'bronze',
     content: [
       { kind: 'info-grid', rows: [
-        { label: { en: 'Wordmark', zh: '字标' }, value: { en: 'Locked — custom drawn from Cormorant', zh: '锁定 — 在 Cormorant 基础上手绘' }, emphasis: 'success' },
-        { label: { en: 'Type stack', zh: '字体堆栈' }, value: { en: 'Cormorant Garamond + Söhne', zh: 'Cormorant Garamond + Söhne' } },
+        { label: { en: 'Wordmark', zh: '字标' }, value: { en: 'Locked — custom drawn', zh: '锁定 — 手绘' }, emphasis: 'success' },
+        { label: { en: 'Type stack', zh: '字体堆栈' }, value: { en: 'Display serif + house grotesk', zh: 'Display serif + house grotesk' } },
         { label: { en: 'Core palette', zh: '核心色板' }, value: { en: 'Tide green · Brick · Cream · Off-black', zh: 'Tide 绿 · 砖红 · 奶油 · 近黑' } },
         { label: { en: 'Photography', zh: '摄影方向' }, value: { en: 'Warm-flash, dinner-table, hands-in-frame', zh: '暖闪、餐桌、手部入画' } },
       ]},
@@ -214,7 +222,6 @@ const STAGES: Stage[] = [
     status: 'active',
     dateLabel: { en: 'Apr 2026', zh: '2026 年 4 月' },
     summary: { en: 'Printer’s wet proofs back. Pantone 5605 needs a small tonal lift on the Tonic SKU. Hero film and OOH masters in offline edit.', zh: '印厂湿样回来了。Tonic SKU 上的 Pantone 5605 需要微调亮度。主片与户外大牌母版在离线剪辑中。' },
-    tone: 'green',
     content: [
       { kind: 'info-grid', rows: [
         { label: { en: 'Production deposit', zh: '生产定金' }, value: { en: '$48,000 · paid Apr 02', zh: '$48,000 · 4 月 2 日已付' }, emphasis: 'success' },
@@ -242,7 +249,6 @@ const STAGES: Stage[] = [
     status: 'upcoming',
     dateLabel: { en: 'Apr 25 – May 03', zh: '4 月 25 日 – 5 月 3 日' },
     summary: { en: 'Three appointments, eight days. Reese will be physically at two of them.', zh: '八天三个日程。其中两个 Reese 会亲自到场。' },
-    tone: 'mint',
     content: [
       { kind: 'checklist', items: [
         { label: { en: 'Photo shoot — Brooklyn Navy Yard', zh: '摄影日 — 布鲁克林海军船坞' }, done: false, sub: { en: 'Sun Apr 26 · all day · Reese on set', zh: '4 月 26 日（日）全天 · Reese 全程' } },
@@ -277,15 +283,15 @@ const STAGES: Stage[] = [
   },
 ]
 
-interface DeliverableRow { status: TL; title: string; subtitle: TL; rounds: number; revs: number; sku: number; price: string; accent?: boolean; notes?: TL; tone: 'green' | 'bronze' | 'mint' }
+interface DeliverableRow { status: TL; title: string; subtitle: TL; rounds: number; revs: number; sku: number; price: string; accent?: boolean; notes?: TL; tone: 'lime' | 'magenta' | 'blackout' | 'paper-deep' }
 
 const DELIVERABLES: DeliverableRow[] = [
-  { status: { en: 'In Approval', zh: '签字中' }, title: 'Brand Guidelines v1.0', subtitle: { en: 'Master identity doc · 38 pages', zh: '品牌识别母规范 · 38 页' }, rounds: 4, revs: 4, sku: 1, price: '$58,000', accent: true, notes: { en: 'Final sign-off blocks production master release.', zh: '最终签字是母文件交付的前置门。' }, tone: 'green' },
-  { status: { en: 'Production', zh: '生产' }, title: 'Tide & Tonic Spritz · 12oz can', subtitle: { en: 'Packaging · 3 SKUs · NY ABC cleared', zh: '包装 · 3 个 SKU · NY 酒管局通过' }, rounds: 5, revs: 5, sku: 3, price: '$46,500', notes: { en: 'Pantone 5605 lift confirmed at the wet-proof stage.', zh: '湿样阶段确认了 Pantone 5605 的微调。' }, tone: 'bronze' },
-  { status: { en: 'Production', zh: '生产' }, title: 'Hero Film · 60s + cuts', subtitle: { en: 'Campaign film · 60s / 30s / 15s / 6s', zh: '战役主片 · 60秒 / 30秒 / 15秒 / 6秒' }, rounds: 3, revs: 2, sku: 4, price: '$38,000', notes: { en: 'Final color session at Final Frame on Apr 29.', zh: '4 月 29 日在 Final Frame 做最终调色。' }, tone: 'mint' },
-  { status: { en: 'Routed', zh: '已发布通路' }, title: 'OOH Series · Subway + Brooklyn', subtitle: { en: 'Out-of-home · 4 placements', zh: '户外 · 4 个媒介' }, rounds: 2, revs: 2, sku: 4, price: '$22,400', notes: { en: 'Subway car-card, Bedford station, BK billboard, Williamsburg bridge.', zh: '地铁车厢卡、Bedford 站、布鲁克林大牌、威廉斯堡桥。' }, tone: 'green' },
-  { status: { en: 'Approved', zh: '已通过' }, title: 'Brand Strategy Doc · final', subtitle: { en: 'Strategy · audience + voice + system', zh: '策略 · 受众 + 语调 + 系统' }, rounds: 3, revs: 2, sku: 1, price: '$24,500', notes: { en: 'Audience: dinner-party hosts, mid-30s, NYC + Hudson Valley.', zh: '受众：晚宴主理人、35 岁上下、纽约 + 哈德逊河谷。' }, tone: 'bronze' },
-  { status: { en: 'In Concept', zh: '概念中' }, title: 'Trade Marketing Toolkit', subtitle: { en: 'Sell sheet, retailer one-pager, shelf strip', zh: '销售单、零售单页、货架条' }, rounds: 1, revs: 0, sku: 3, price: '$11,200', notes: { en: 'Drafts due May 09 ahead of indie-grocer trade show.', zh: '5 月 9 日交稿，赶上独立超市行业展。' }, tone: 'mint' },
+  { status: { en: 'In Approval', zh: '签字中' }, title: 'Brand Guidelines v1.0', subtitle: { en: 'Master identity doc · 38 pages', zh: '品牌识别母规范 · 38 页' }, rounds: 4, revs: 4, sku: 1, price: '$58,000', accent: true, notes: { en: 'Final sign-off blocks production master release.', zh: '最终签字是母文件交付的前置门。' }, tone: 'lime' },
+  { status: { en: 'Production', zh: '生产' }, title: 'Tide & Tonic Spritz · 12oz can', subtitle: { en: 'Packaging · 3 SKUs · NY ABC cleared', zh: '包装 · 3 个 SKU · NY 酒管局通过' }, rounds: 5, revs: 5, sku: 3, price: '$46,500', notes: { en: 'Pantone 5605 lift confirmed at the wet-proof stage.', zh: '湿样阶段确认了 Pantone 5605 的微调。' }, tone: 'magenta' },
+  { status: { en: 'Production', zh: '生产' }, title: 'Hero Film · 60s + cuts', subtitle: { en: 'Campaign film · 60s / 30s / 15s / 6s', zh: '战役主片 · 60秒 / 30秒 / 15秒 / 6秒' }, rounds: 3, revs: 2, sku: 4, price: '$38,000', notes: { en: 'Final color session at Final Frame on Apr 29.', zh: '4 月 29 日在 Final Frame 做最终调色。' }, tone: 'blackout' },
+  { status: { en: 'Routed', zh: '已发布通路' }, title: 'OOH Series · Subway + Brooklyn', subtitle: { en: 'Out-of-home · 4 placements', zh: '户外 · 4 个媒介' }, rounds: 2, revs: 2, sku: 4, price: '$22,400', notes: { en: 'Subway car-card, Bedford station, BK billboard, Williamsburg bridge.', zh: '地铁车厢卡、Bedford 站、布鲁克林大牌、威廉斯堡桥。' }, tone: 'paper-deep' },
+  { status: { en: 'Approved', zh: '已通过' }, title: 'Brand Strategy Doc · final', subtitle: { en: 'Strategy · audience + voice + system', zh: '策略 · 受众 + 语调 + 系统' }, rounds: 3, revs: 2, sku: 1, price: '$24,500', notes: { en: 'Audience: dinner-party hosts, mid-30s, NYC + Hudson Valley.', zh: '受众：晚宴主理人、35 岁上下、纽约 + 哈德逊河谷。' }, tone: 'lime' },
+  { status: { en: 'In Concept', zh: '概念中' }, title: 'Trade Marketing Toolkit', subtitle: { en: 'Sell sheet, retailer one-pager, shelf strip', zh: '销售单、零售单页、货架条' }, rounds: 1, revs: 0, sku: 3, price: '$11,200', notes: { en: 'Drafts due May 09 ahead of indie-grocer trade show.', zh: '5 月 9 日交稿，赶上独立超市行业展。' }, tone: 'magenta' },
 ]
 
 interface AppointmentRow { when: TL; title: TL; where: TL; status: TL }
@@ -328,7 +334,7 @@ interface BrandCard { label: TL; value: TL; sub: TL }
 const BRAND_CARDS: BrandCard[] = [
   { label: { en: 'Audience', zh: '受众' }, value: { en: 'Dinner-party hosts · mid-30s · NYC + Hudson Valley', zh: '晚宴主理人 · 35 岁上下 · 纽约 + 哈德逊河谷' }, sub: { en: 'Already buys indie wine; not a hard-seltzer drinker.', zh: '已经在购买独立葡萄酒；不是硬苏打消费者。' } },
   { label: { en: 'Voice', zh: '语调' }, value: { en: 'Warm, specific, lightly literary — never wink-and-nudge', zh: '温暖、具体、略带文学感 —— 不耍机灵' }, sub: { en: 'A friend who reads. Not a marketer who sells.', zh: '像一位读书的朋友，不是推销的市场经理。' } },
-  { label: { en: 'Visual system', zh: '视觉系统' }, value: { en: 'Tide green · Brick · Cream · Off-black', zh: 'Tide 绿 · 砖红 · 奶油 · 近黑' }, sub: { en: 'Cormorant + Söhne. Warm-flash photography only.', zh: 'Cormorant + Söhne。仅采用暖闪摄影。' } },
+  { label: { en: 'Visual system', zh: '视觉系统' }, value: { en: 'Tide green · Brick · Cream · Off-black', zh: 'Tide 绿 · 砖红 · 奶油 · 近黑' }, sub: { en: 'Display serif + house grotesk. Warm-flash photography only.', zh: 'Display serif + house grotesk。仅采用暖闪摄影。' } },
   { label: { en: 'Sound', zh: '声音' }, value: { en: 'Standup bass + brushed snare · no synths', zh: '低音提琴 + 刷扫小军鼓 · 无合成器' }, sub: { en: 'Hero film score commissioned from a Brooklyn jazz duo.', zh: '主片配乐委托给一组布鲁克林爵士二人组。' } },
   { label: { en: 'Photography', zh: '摄影' }, value: { en: 'Hands-in-frame · dinner table · golden-hour kitchens', zh: '手部入画 · 餐桌 · 黄金时刻的厨房' }, sub: { en: 'No model glamour shots. No isolated product on white.', zh: '不拍模特摆拍。不拍纯白底产品图。' } },
   { label: { en: 'Reactive strategy', zh: '反应式策略' }, value: { en: 'One day a week, by Reese herself, at trade pub level only', zh: '每周一天 · 由 Reese 亲自处理 · 仅至行业刊物层级' }, sub: { en: 'No meme-replies, no brand-hijinks. Quiet wins.', zh: '不做表情包式回复、不做品牌乱入式互动。靠安静取胜。' } },
@@ -364,6 +370,12 @@ const MESSAGES: MessageRow[] = [
             zh: '色稿备忘录（第二轮）出了。有两点值得聊一下——Pantone 5605 微调与 Tonic 罐体的字距。今晚把建议的印版改动语言发过来。' } },
 ]
 
+const NEXT_THREE: TL[] = [
+  { en: 'Photo shoot · Brooklyn Navy Yard · Apr 26', zh: '摄影日 · 布鲁克林海军船坞 · 4 月 26 日' },
+  { en: 'Final color session · Final Frame · Apr 29', zh: '主片最终调色 · Final Frame · 4 月 29 日' },
+  { en: 'Master files & IP transfer · Apr 30', zh: '母文件 & IP 转让 · 4 月 30 日' },
+]
+
 export default function Dashboard({ member, tenant, onSignOut }: Props) {
   const [tab, setTab] = useState<TabId>('journey')
   const [lang, setLangState] = useState<Lang>(readInitialLang)
@@ -383,16 +395,17 @@ export default function Dashboard({ member, tenant, onSignOut }: Props) {
 
   return (
     <div className="pv-shell">
+      <RunningPanel lang={lang} />
       <Header current={tab} onTabChange={setTab} member={member} tenant={tenant} onSignOut={onSignOut} lang={lang} onToggleLang={toggleLang} />
       <main className="pv-main">
         <div className="pv-tabpanel">
-          {tab === 'journey' && <JourneyView member={member} lang={lang} />}
-          {tab === 'deliverables' && <DeliverablesView lang={lang} />}
-          {tab === 'brand' && <BrandView lang={lang} />}
-          {tab === 'schedule' && <ScheduleView lang={lang} />}
-          {tab === 'billing' && <BillingView lang={lang} />}
-          {tab === 'documents' && <DocumentsView lang={lang} />}
-          {tab === 'messages' && <MessagesView lang={lang} />}
+          {tab === 'journey' && <RunsheetView member={member} lang={lang} />}
+          {tab === 'deliverables' && <WorkWallView lang={lang} />}
+          {tab === 'brand' && <MarkView lang={lang} />}
+          {tab === 'schedule' && <CalendarView lang={lang} />}
+          {tab === 'billing' && <StatementView lang={lang} />}
+          {tab === 'documents' && <FileRoomView lang={lang} />}
+          {tab === 'messages' && <StudioLineView lang={lang} />}
         </div>
       </main>
       <Footer lang={lang} />
@@ -400,10 +413,42 @@ export default function Dashboard({ member, tenant, onSignOut }: Props) {
   )
 }
 
+/* ─────────────── WHAT'S RUNNING panel (signature) ─────────────── */
+function RunningPanel({ lang }: { lang: Lang }) {
+  return (
+    <section className="pv-running" aria-label="Currently running">
+      <div className="pv-running__inner">
+        <div className="pv-running__main">
+          <p className="pv-running__eyebrow">{t(lang, 'running.eyebrow')}</p>
+          <h1 className="pv-running__title">{t(lang, 'running.current')}</h1>
+          <p className="pv-running__deadline">{t(lang, 'running.deadline')}</p>
+        </div>
+        <div className="pv-running__next">
+          <span className="pv-running__nextlabel">{t(lang, 'running.next')}</span>
+          <ol className="pv-running__list">
+            {NEXT_THREE.map((it, i) => (
+              <li key={i}>
+                <span className="pv-running__idx">{String(i + 1).padStart(2, '0')}</span>
+                <span>{tl(lang, it)}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+      <div className="pv-running__marquee marquee marquee--blackout" aria-hidden="true">
+        <div className="marquee__track">
+          {NEXT_THREE.concat(NEXT_THREE).map((it, i) => (
+            <span key={i} className={`marquee__item ${i % 2 === 0 ? 'marquee__item--accent' : ''}`}>{tl(lang, it)}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─────────────── Header ─────────────── */
 function Header({ current, onTabChange, member, onSignOut, lang, onToggleLang }: { current: TabId; onTabChange: (t: TabId) => void; member: PortalMember; tenant: PortalTenantIdentity | null; onSignOut: () => void; lang: Lang; onToggleLang: () => void }) {
   const firstName = (member.name || 'You').split(/\s+/)[0] || 'You'
-  const initial = (member.name || 'Y').charAt(0).toUpperCase()
   return (
     <header className="pv-header">
       <div className="pv-header__top">
@@ -414,19 +459,17 @@ function Header({ current, onTabChange, member, onSignOut, lang, onToggleLang }:
             <span className="pv-brand__kicker">{lang === 'zh' ? '布鲁克林独立创意工作室 · EIN #88-3014502' : 'Independent Creative Agency · EIN #88-3014502'}</span>
           </span>
         </a>
-        <div className="pv-header__mid">
-          <span className="pv-brand__tagline">{t(lang, 'header.tagline')}</span>
-        </div>
         <div className="pv-header__right">
           <span className="pv-demo-pill" title={lang === 'zh' ? '公开演示 — 不需要登录。' : 'This is a public demo — no login required.'}>{t(lang, 'demo.pill')}</span>
           <button type="button" className="pv-lang-btn" onClick={onToggleLang} aria-label={lang === 'zh' ? 'Switch to English' : '切换到中文'}>
             {lang === 'zh' ? 'EN' : '中文'}
           </button>
           <a className="pv-contact" href="tel:+17185550142" aria-label="Call the studio">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.8a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.35 1.84.59 2.8.72A2 2 0 0 1 22 16.92z"/></svg>
             <span>{t(lang, 'call')}</span>
           </a>
-          <UserChip name={firstName} initial={initial} onSignOut={onSignOut} lang={lang} />
+          <button type="button" className="pv-back" onClick={onSignOut}>
+            {firstName} · {t(lang, 'back.site')}
+          </button>
         </div>
       </div>
       <nav className="pv-tabs" aria-label="Portal sections">
@@ -446,32 +489,6 @@ function Header({ current, onTabChange, member, onSignOut, lang, onToggleLang }:
   )
 }
 
-function UserChip({ name, initial, onSignOut, lang }: { name: string; initial: string; onSignOut: () => void; lang: Lang }) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    if (!open) return
-    function onDocClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('click', onDocClick)
-    return () => document.removeEventListener('click', onDocClick)
-  }, [open])
-  return (
-    <div className="pv-user" ref={ref}>
-      <button type="button" className="pv-user__btn" onClick={() => setOpen(o => !o)} aria-haspopup="menu" aria-expanded={open}>
-        <span className="pv-user__avatar">{initial}</span>
-        <span className="pv-user__name">{name}</span>
-      </button>
-      {open && (
-        <div className="pv-user__menu" role="menu">
-          <button type="button" className="pv-user__menu-danger" onClick={() => { setOpen(false); onSignOut() }}>{t(lang, 'back.site')}</button>
-        </div>
-      )}
-    </div>
-  )
-}
-
 const TABS: { id: TabId; i18nKey: TKey; badge?: number }[] = [
   { id: 'journey', i18nKey: 'tab.journey' },
   { id: 'deliverables', i18nKey: 'tab.deliverables' },
@@ -482,54 +499,45 @@ const TABS: { id: TabId; i18nKey: TKey; badge?: number }[] = [
   { id: 'messages', i18nKey: 'tab.messages' },
 ]
 
-/* ─────────────── Journey — vertical timeline ─────────────── */
-function JourneyView({ member, lang }: { member: PortalMember; lang: Lang }) {
+/* ─────────────── RUNSHEET — hairline-ruled production schedule ─────────────── */
+function RunsheetView({ member, lang }: { member: PortalMember; lang: Lang }) {
   const displayName = member.name || 'Tide & Tonic'
   const done = STAGES.filter(s => s.status === 'done').length
   const pct = Math.round(((done + 0.5) / STAGES.length) * 100)
   const nextTag = STAGES[done] ? tl(lang, STAGES[done].tag) : ''
-  return (
-    <div className="pv-journey">
-      <header className="pv-journey__head">
-        <span className="section-label">{t(lang, 'journey.eyebrow')}</span>
-        <h1>{displayName}{t(lang, 'journey.title.suffix')}</h1>
-        <p>{t(lang, 'journey.subtitle')}</p>
-      </header>
-      <div className="pv-progress">
-        <div className="pv-progress__bar">
-          <div className="pv-progress__fill" style={{ width: `${pct}%` }} />
-        </div>
-        <div className="pv-progress__meta">
-          <span>{pct}{t(lang, 'journey.complete')}</span>
-          <span>{done} {t(lang, 'journey.of')} {STAGES.length} {t(lang, 'journey.stages.done')} {nextTag}</span>
-        </div>
-      </div>
 
-      <ol className="pv-timeline">
+  function statusPill(status: Stage['status'], lang: Lang) {
+    if (status === 'done') return <span className="pv-pill pv-pill--done">{t(lang, 'journey.done')}</span>
+    if (status === 'active') return <span className="pv-pill pv-pill--current">{t(lang, 'journey.current')}</span>
+    return <span className="pv-pill pv-pill--upcoming">{t(lang, 'journey.upcoming')}</span>
+  }
+
+  return (
+    <div className="pv-runsheet">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'journey.eyebrow')}</p>
+        <h2>{displayName}{t(lang, 'journey.title.suffix')}</h2>
+        <p className="pv-lede">{t(lang, 'journey.subtitle')}</p>
+        <p className="pv-runsheet__progress">
+          <span>{pct}{t(lang, 'journey.complete')}</span>
+          <span> · {done} {t(lang, 'journey.of')} {STAGES.length} {t(lang, 'journey.stages.done')} {nextTag}</span>
+        </p>
+      </header>
+
+      <ol className="pv-runsheet__list">
         {STAGES.map(stage => (
-          <li key={stage.id} className={`pv-tl pv-tl--${stage.status}`}>
-            <aside className="pv-tl__rail">
-              <span className="pv-tl__date">{tl(lang, stage.dateLabel)}</span>
-              <span className="pv-tl__dot">
-                {stage.status === 'done'
-                  ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7"/></svg>
-                  : stage.status === 'active'
-                    ? <span className="pv-tl__pulse" />
-                    : null}
-              </span>
-            </aside>
-            <article className="pv-tl__card">
-              {stage.tone && (
-                <div className={`pv-tl__photo pv-tl__photo--${stage.tone}`} aria-hidden />
-              )}
-              <header className="pv-tl__cardhead">
-                <span className="pv-tag">{tl(lang, stage.tag)}</span>
-                {stage.status === 'active' && <span className="pv-tag pv-tag--active">{t(lang, 'journey.current')}</span>}
-              </header>
-              <h2 className="pv-tl__title">{tl(lang, stage.title)}</h2>
-              {stage.summary && <p className="pv-tl__summary">{tl(lang, stage.summary)}</p>}
+          <li key={stage.id} className={`pv-runrow pv-runrow--${stage.status}`}>
+            <span className="pv-runrow__idx">{String(stage.idx).padStart(2, '0')}</span>
+            <div className="pv-runrow__body">
+              <span className="pv-runrow__tag">{tl(lang, stage.tag)}</span>
+              <h3 className="pv-runrow__title">{tl(lang, stage.title)}</h3>
+              {stage.summary && <p className="pv-runrow__summary">{tl(lang, stage.summary)}</p>}
               {stage.content.map((block, i) => <ContentBlock key={i} block={block} lang={lang} />)}
-            </article>
+            </div>
+            <div className="pv-runrow__meta">
+              {statusPill(stage.status, lang)}
+              <span className="pv-runrow__date">{tl(lang, stage.dateLabel)}</span>
+            </div>
           </li>
         ))}
       </ol>
@@ -544,33 +552,16 @@ function ContentBlock({ block, lang }: { block: StageContent; lang: Lang }) {
         {block.rows.map((r, i) => (
           <div key={i} className="pv-infogrid__row">
             <dt>{tl(lang, r.label)}</dt>
-            <dd className={r.emphasis ? `pv-infogrid__value--${r.emphasis}` : ''}>{tl(lang, r.value)}</dd>
+            <dd className={r.emphasis ? `pv-infogrid__value--${r.emphasis}` : ''} dangerouslySetInnerHTML={{ __html: tl(lang, r.value) }} />
           </div>
         ))}
       </dl>
-    )
-    case 'listings': return (
-      <div className="pv-embedded-listings">
-        {block.items.map((p, i) => (
-          <div key={i} className="pv-embedded-listing">
-            <div className={`pv-embedded-listing__img pv-embedded-listing__img--${p.tone}`} aria-hidden />
-            <div className="pv-embedded-listing__body">
-              {p.status && <span className="pv-tag pv-tag--active">{tl(lang, p.status)}</span>}
-              <strong>{p.title}</strong>
-              <span>{p.subtitle}</span>
-              <span>{p.rounds} {lang === 'zh' ? '轮' : 'round'} · {p.revs} {lang === 'zh' ? '次修改' : 'revs'} · {p.sku} {lang === 'zh' ? '个 SKU' : 'SKU'}</span>
-            </div>
-          </div>
-        ))}
-      </div>
     )
     case 'documents': return (
       <ul className="pv-docs">
         {block.items.map((d, i) => (
           <li key={i} className={`pv-docs__row ${d.action ? 'pv-docs__row--action' : ''}`}>
-            <span className="pv-docs__icon" aria-hidden>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-            </span>
+            <span className="pv-docs__icon" aria-hidden>—</span>
             <div className="pv-docs__body">
               <strong>{tl(lang, d.name)}</strong>
               <span>{tl(lang, d.size)}</span>
@@ -584,9 +575,7 @@ function ContentBlock({ block, lang }: { block: StageContent; lang: Lang }) {
       <ul className="pv-check">
         {block.items.map((it, i) => (
           <li key={i} className={`pv-check__row ${it.done ? 'pv-check__row--done' : ''}`}>
-            <span className="pv-check__mark" aria-hidden>
-              {it.done && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7"/></svg>}
-            </span>
+            <span className="pv-check__mark" aria-hidden>{it.done ? '✓' : '·'}</span>
             <div className="pv-check__body">
               <span>{tl(lang, it.label)}</span>
               {it.sub && <span className="pv-check__sub">{tl(lang, it.sub)}</span>}
@@ -598,7 +587,7 @@ function ContentBlock({ block, lang }: { block: StageContent; lang: Lang }) {
     case 'actions': return (
       <div className="pv-actions">
         {block.buttons.map((b, i) => (
-          <a key={i} className={`button ${b.primary ? 'button-primary' : 'button-secondary'}`} href={b.href || '#'}>{t(lang, b.labelKey)}</a>
+          <a key={i} className={`button ${b.primary ? 'button--lime' : ''}`} href={b.href || '#'}>{t(lang, b.labelKey)}</a>
         ))}
       </div>
     )
@@ -611,30 +600,33 @@ function ContentBlock({ block, lang }: { block: StageContent; lang: Lang }) {
   }
 }
 
-/* ─────────────── Other tabs ─────────────── */
-function DeliverablesView({ lang }: { lang: Lang }) {
+/* ─────────────── WORK WALL — riso swatch tiles ─────────────── */
+function WorkWallView({ lang }: { lang: Lang }) {
   return (
     <div className="pv-stack">
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'deliverables.title')}</p>
         <h2>{t(lang, 'deliverables.title')}</h2>
-        <p>{t(lang, 'deliverables.subtitle')}</p>
-      </div>
-      <div className="pv-propgrid">
+        <p className="pv-lede">{t(lang, 'deliverables.subtitle')}</p>
+      </header>
+      <div className="pv-wall">
         {DELIVERABLES.map((p, i) => (
-          <article key={i} className={`pv-propcard ${p.accent ? 'pv-propcard--accent' : ''}`}>
-            <div className={`pv-propcard__img pv-propcard__img--${p.tone}`} aria-hidden />
-            <div className="pv-propcard__body">
-              <span className={`pv-tag ${p.accent ? 'pv-tag--active' : ''}`}>{tl(lang, p.status)}</span>
-              <h3>{p.title}</h3>
-              <p className="pv-propcard__hood">{tl(lang, p.subtitle)}</p>
-              <div className="pv-propcard__specs">
-                <span>{p.rounds} {lang === 'zh' ? '轮' : 'round'}</span><span>·</span>
-                <span>{p.revs} {lang === 'zh' ? '次修改' : 'revs'}</span><span>·</span>
-                <span>{p.sku} {lang === 'zh' ? '个' : 'SKU'}</span>
-              </div>
-              <div className="pv-propcard__price">{p.price}</div>
-              {p.notes && <p className="pv-propcard__notes">{tl(lang, p.notes)}</p>}
+          <article key={i} className={`pv-wall__tile pv-wall__tile--${p.tone}`}>
+            <div className="pv-wall__corner">
+              <span>WORK NO. {String(i + 1).padStart(2, '0')}</span>
+              <span>{p.price}</span>
             </div>
+            <h3 className="pv-wall__title">{p.title}</h3>
+            <p className="pv-wall__sub">{tl(lang, p.subtitle)}</p>
+            <div className="pv-wall__specs">
+              <span>{p.rounds} {lang === 'zh' ? '轮' : 'round'}</span>
+              <span>·</span>
+              <span>{p.revs} {lang === 'zh' ? '次修改' : 'revs'}</span>
+              <span>·</span>
+              <span>{p.sku} {lang === 'zh' ? '个' : 'SKU'}</span>
+            </div>
+            <span className={`pv-pill ${p.accent ? 'pv-pill--current' : 'pv-pill--upcoming'}`}>{tl(lang, p.status)}</span>
+            {p.notes && <p className="pv-wall__notes">{tl(lang, p.notes)}</p>}
           </article>
         ))}
       </div>
@@ -642,64 +634,66 @@ function DeliverablesView({ lang }: { lang: Lang }) {
   )
 }
 
-function BrandView({ lang }: { lang: Lang }) {
+/* ─────────────── MARK — wordmark book spread ─────────────── */
+function MarkView({ lang }: { lang: Lang }) {
   return (
     <div className="pv-stack">
-      <div className="pv-hoodhero pv-hoodhero--brand" aria-hidden>
-        <div className="pv-hoodhero__veil" />
-        <div className="pv-hoodhero__caption">
-          <span>{t(lang, 'brand.title')}</span>
-          <strong>{t(lang, 'brand.hero.caption')}</strong>
-        </div>
-      </div>
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'brand.hero.caption')}</p>
         <h2>{t(lang, 'brand.title')}</h2>
-        <p>{t(lang, 'brand.subtitle')}</p>
-      </div>
-      <div className="pv-hoodstats">
+        <p className="pv-lede" dangerouslySetInnerHTML={{ __html: t(lang, 'brand.subtitle') }} />
+      </header>
+      <section className="pv-mark-states" aria-label="Wordmark states">
+        <div className="pv-mark pv-mark--paper">Tide &amp; Tonic</div>
+        <div className="pv-mark pv-mark--lime">Tide &amp; Tonic</div>
+        <div className="pv-mark pv-mark--magenta">Tide &amp; Tonic</div>
+        <div className="pv-mark pv-mark--blackout">Tide &amp; Tonic</div>
+        <div className="pv-mark pv-mark--paper-deep">Tide &amp; Tonic</div>
+        <div className="pv-mark pv-mark--inverse">T&amp;T</div>
+      </section>
+      <section className="pv-mark-stats">
         {BRAND_STATS.map((s, i) => (
-          <div key={i} className="pv-hoodstat">
+          <div key={i} className="pv-mark-stat">
             <strong>{tl(lang, s.big)}</strong>
             <span>{tl(lang, s.small)}</span>
           </div>
         ))}
-      </div>
-      <div className="pv-hoodgrid">
+      </section>
+      <section className="pv-mark-grid">
         {BRAND_CARDS.map((c, i) => (
-          <article key={i} className="pv-hoodcard">
-            <div className="pv-hoodcard__body">
-              <span className="pv-hoodcard__label">{tl(lang, c.label)}</span>
-              <strong>{tl(lang, c.value)}</strong>
-              <p>{tl(lang, c.sub)}</p>
-            </div>
+          <article key={i} className="pv-mark-card">
+            <span className="pv-mark-card__label">{tl(lang, c.label)}</span>
+            <strong dangerouslySetInnerHTML={{ __html: tl(lang, c.value) }} />
+            <p>{tl(lang, c.sub)}</p>
           </article>
         ))}
-      </div>
+      </section>
     </div>
   )
 }
 
-function ScheduleView({ lang }: { lang: Lang }) {
+/* ─────────────── CALENDAR — hairline-grid schedule ─────────────── */
+function CalendarView({ lang }: { lang: Lang }) {
   return (
     <div className="pv-stack">
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'schedule.title')}</p>
         <h2>{t(lang, 'schedule.title')}</h2>
-        <p>{t(lang, 'schedule.subtitle')}</p>
-      </div>
-      <ul className="pv-list">
+        <p className="pv-lede">{t(lang, 'schedule.subtitle')}</p>
+      </header>
+      <ul className="pv-cal">
         {APPOINTMENTS.map((a, i) => {
-          const statusTxt = tl(lang, a.status)
           const isAction = a.status.en === 'Action needed'
           return (
-            <li key={i} className="pv-row">
-              <div className="pv-row__left">
-                <span className="pv-row__when">{tl(lang, a.when)}</span>
+            <li key={i} className={`pv-cal__row ${isAction ? 'pv-cal__row--action' : ''}`}>
+              <span className="pv-cal__when">{tl(lang, a.when)}</span>
+              <div className="pv-cal__body">
                 <strong>{tl(lang, a.title)}</strong>
-                <span className="pv-row__sub">{tl(lang, a.where)}</span>
+                <span>{tl(lang, a.where)}</span>
               </div>
-              <div className="pv-row__right">
-                <span className={`pv-tag ${isAction ? 'pv-tag--active' : ''}`}>{statusTxt}</span>
-                <a className="button button-secondary button-sm" href="#">{t(lang, 'addcal')}</a>
+              <div className="pv-cal__right">
+                <span className={`pv-pill ${isAction ? 'pv-pill--current' : 'pv-pill--upcoming'}`}>{tl(lang, a.status)}</span>
+                <a className="button button--sm" href="#">{t(lang, 'addcal')}</a>
               </div>
             </li>
           )
@@ -709,55 +703,84 @@ function ScheduleView({ lang }: { lang: Lang }) {
   )
 }
 
-function BillingView({ lang }: { lang: Lang }) {
+/* ─────────────── STATEMENT — mono ledger ─────────────── */
+function StatementView({ lang }: { lang: Lang }) {
   const paid = BILLING.filter(p => p.status.en === 'Paid').length
+  const total = BILLING.reduce((sum, b) => sum + Number(b.amount.replace(/[$,]/g, '')), 0)
+  const pendingTotal = BILLING.filter(b => b.status.en !== 'Paid').reduce((sum, b) => sum + Number(b.amount.replace(/[$,]/g, '')), 0)
   return (
     <div className="pv-stack">
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'billing.title')}</p>
         <h2>{t(lang, 'billing.title')}</h2>
-        <p>{paid} {t(lang, 'billing.paid')} &middot; {BILLING.length - paid} {t(lang, 'billing.pending')}</p>
-      </div>
-      <ul className="pv-list">
-        {BILLING.map((p, i) => {
-          const isPaid = p.status.en === 'Paid'
-          const noteStr = p.note ? tl(lang, p.note) : null
-          return (
-            <li key={i} className="pv-row">
-              <div className="pv-row__left">
-                <strong>{tl(lang, p.label)}</strong>
-                <span className="pv-row__sub">{tl(lang, p.date)}{noteStr ? ` · ${noteStr}` : ''}</span>
-              </div>
-              <div className="pv-row__right">
-                <strong className="pv-row__amount">{p.amount}</strong>
-                <span className={`pv-tag ${isPaid ? '' : 'pv-tag--active'}`}>{tl(lang, p.status)}</span>
-              </div>
-            </li>
-          )
-        })}
-      </ul>
+        <p className="pv-lede">{paid} {t(lang, 'billing.paid')} · {BILLING.length - paid} {t(lang, 'billing.pending')}</p>
+      </header>
+      <table className="pv-ledger">
+        <thead>
+          <tr>
+            <th>{lang === 'zh' ? '日期' : 'Date'}</th>
+            <th>{lang === 'zh' ? '描述' : 'Description'}</th>
+            <th>{lang === 'zh' ? '状态' : 'Status'}</th>
+            <th className="pv-ledger__num">{lang === 'zh' ? '金额' : 'Amount'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {BILLING.map((p, i) => {
+            const isPaid = p.status.en === 'Paid'
+            const noteStr = p.note ? tl(lang, p.note) : null
+            return (
+              <tr key={i}>
+                <td>{tl(lang, p.date)}</td>
+                <td>
+                  <strong>{tl(lang, p.label)}</strong>
+                  {noteStr && <span className="pv-ledger__note">{noteStr}</span>}
+                </td>
+                <td><span className={`pv-pill ${isPaid ? 'pv-pill--done' : 'pv-pill--current'}`}>{tl(lang, p.status)}</span></td>
+                <td className="pv-ledger__num">{p.amount}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+        <tfoot>
+          <tr className="pv-ledger__total">
+            <td colSpan={3}>{lang === 'zh' ? '合计 · 待付' : 'Outstanding balance'}</td>
+            <td className="pv-ledger__num">${pendingTotal.toLocaleString('en-US')}</td>
+          </tr>
+          <tr>
+            <td colSpan={3}>{lang === 'zh' ? '合同总额' : 'Total engagement'}</td>
+            <td className="pv-ledger__num">${total.toLocaleString('en-US')}</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   )
 }
 
-function DocumentsView({ lang }: { lang: Lang }) {
+/* ─────────────── FILE ROOM — mono filename + status pill ─────────────── */
+function FileRoomView({ lang }: { lang: Lang }) {
   return (
     <div className="pv-stack">
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'documents.title')}</p>
         <h2>{t(lang, 'documents.title')}</h2>
-        <p>{t(lang, 'documents.subtitle')}</p>
-      </div>
-      <ul className="pv-list">
+        <p className="pv-lede" dangerouslySetInnerHTML={{ __html: t(lang, 'documents.subtitle') }} />
+      </header>
+      <ul className="pv-files">
         {DOCUMENTS.map((d, i) => {
           const updatedLabel = lang === 'zh' ? '更新于' : 'updated'
           return (
-            <li key={i} className={`pv-row ${d.action ? 'pv-row--flag' : ''}`}>
-              <div className="pv-row__left">
+            <li key={i} className={`pv-files__row ${d.action ? 'pv-files__row--action' : ''}`}>
+              <span className="pv-files__hash">FILE {String(i + 1).padStart(3, '0')}</span>
+              <div className="pv-files__body">
                 <strong>{tl(lang, d.name)}</strong>
-                <span className="pv-row__sub">{tl(lang, d.kind)} · {updatedLabel} {tl(lang, d.updated)}</span>
+                <span>{tl(lang, d.kind)} · {updatedLabel} {tl(lang, d.updated)}</span>
               </div>
-              <div className="pv-row__right">
-                <a className="button button-secondary button-sm" href="#">{t(lang, 'download')}</a>
-                {d.action && <a className="button button-primary button-sm" href="#">{t(lang, 'reviewsign')}</a>}
+              <span className={`pv-pill ${d.action ? 'pv-pill--current' : 'pv-pill--done'}`}>
+                {d.action ? (lang === 'zh' ? '待签' : 'PENDING') : (lang === 'zh' ? '已签' : 'SIGNED')}
+              </span>
+              <div className="pv-files__actions">
+                <a className="button button--sm" href="#">{t(lang, 'download')}</a>
+                {d.action && <a className="button button--sm button--lime" href="#">{t(lang, 'reviewsign')}</a>}
               </div>
             </li>
           )
@@ -767,17 +790,22 @@ function DocumentsView({ lang }: { lang: Lang }) {
   )
 }
 
-function MessagesView({ lang }: { lang: Lang }) {
+/* ─────────────── STUDIO LINE — slack-style monospaced thread ─────────────── */
+function StudioLineView({ lang }: { lang: Lang }) {
   return (
     <div className="pv-stack">
-      <div className="pv-section-head">
+      <header className="pv-section-head">
+        <p className="pv-eyebrow">{t(lang, 'messages.title')}</p>
         <h2>{t(lang, 'messages.title')}</h2>
-        <p>{t(lang, 'messages.subtitle')}</p>
-      </div>
+        <p className="pv-lede">{t(lang, 'messages.subtitle')}</p>
+      </header>
       <div className="pv-thread">
         {MESSAGES.map((m, i) => (
-          <div key={i} className={`pv-msg ${m.me ? 'pv-msg--you' : ''}`}>
-            <div className="pv-msg__head"><strong>{tl(lang, m.speaker)}</strong><span>{tl(lang, m.time)}</span></div>
+          <div key={i} className={`pv-line ${m.me ? 'pv-line--you' : ''}`}>
+            <div className="pv-line__head">
+              <strong>{tl(lang, m.speaker)}</strong>
+              <span>{tl(lang, m.time)}</span>
+            </div>
             <p>{tl(lang, m.body)}</p>
           </div>
         ))}
