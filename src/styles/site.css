@@ -34,8 +34,17 @@
   --font-mono:    "Geist Mono", "SFMono-Regular", ui-monospace, "Cascadia Mono",
                   Menlo, monospace;
 
-  /* Layout */
-  --container: 1180px;
+  /* Layout — shared by site chrome AND portal chrome via portal.css.
+     Single source of truth so the brand never shifts horizontally between
+     /, /about, /portal, etc. when viewport-width crosses the gutter clamp. */
+  --page-max:    1180px;
+  --page-gutter: 24px;
+  --container:   var(--page-max); /* legacy alias */
+
+  /* Internal block gap — DESIGN.md "Spacing" rule. Used by adjacent-sibling
+     rhythm rules and the .actions class so HTML never inlines margin-top. */
+  --block-gap:    clamp(24px, 3vw, 56px);
+  --block-gap-sm: clamp(20px, 2vw, 32px);
 
   font-family: var(--font-body);
   color: var(--ink);
@@ -76,9 +85,11 @@ em { font-style: normal; text-decoration: underline; text-decoration-color: var(
 .shell { min-height: 100vh; display: flex; flex-direction: column; }
 
 .container {
-  width: min(calc(100% - 48px), var(--container));
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
 }
+
+.container--gap-top { margin-top: var(--block-gap); }
 
 .bleed {
   width: 100vw;
@@ -99,6 +110,8 @@ em { font-style: normal; text-decoration: underline; text-decoration-color: var(
 }
 .blackout a { color: var(--lime); }
 .blackout .eyebrow { color: var(--on-blackout-muted); }
+.blackout .lede { color: var(--on-blackout-fg); }
+.blackout .dim { color: var(--on-blackout-muted); }
 
 /* ─────────────── Type ─────────────── */
 
@@ -296,6 +309,60 @@ p + p { margin-top: 1em; }
 .button--sm { min-height: 34px; padding: 0 14px; font-size: 0.66rem; }
 
 .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ─────────────── Internal-block rhythm (DESIGN.md "Spacing") ───────────────
+   These adjacent-sibling rules absorb the `style="margin-top: …"` that
+   was previously inlined on every page. The CSS owns the rhythm; HTML
+   should not need to assert spacing again. */
+.signature + .actions,
+.lede + .actions,
+.pull-quote + .actions,
+p + .actions,
+.editorial-3 + .actions,
+.eyebrow + .actions,
+ol + .actions,
+ul + .actions,
+.service-field__list + .actions {
+  margin-top: var(--block-gap-sm);
+}
+
+.lede + form,
+.lede + .poster-tiles,
+.lede + .team-grid,
+.lede + .editorial-3,
+.lede + .manifesto-wall,
+.lede + .container,
+.lede + .tab-block,
+.eyebrow + form,
+.eyebrow + .poster-tiles,
+.eyebrow + .team-grid,
+.eyebrow + .manifesto-wall,
+.eyebrow + .tab-block,
+h1 + .lede,
+h2 + .lede,
+h2 + .editorial-3,
+h2 + .manifesto-wall,
+h2 + .team-grid,
+h2 + .poster-tiles,
+h2 + form,
+h2 + .tab-block,
+.section h2 + .container,
+.section h2 + .poster-tiles,
+.section h2 + .team-grid,
+.section > .container + .poster-tiles {
+  margin-top: var(--block-gap);
+}
+
+h1 + .lede,
+h2 + .lede {
+  margin-top: clamp(1rem, 1.4vw, 1.4rem);
+}
+
+.step h3 + .dim,
+.editorial-3 .dim,
+h3 + .dim {
+  margin-top: 0.4rem;
+}
 
 /* ─────────────── Hero (mega H1) ─────────────── */
 
@@ -860,6 +927,10 @@ p + p { margin-top: 1em; }
   flex-direction: column;
   gap: 1rem;
 }
+.triptych__panel--lime { background: var(--lime); color: var(--ink); }
+.triptych__panel--paper-deep { background: var(--paper-deep); color: var(--ink); }
+.triptych__panel--blackout { background: var(--blackout); color: var(--on-blackout-fg); }
+.triptych__panel .riso-swatch { margin-top: auto; }
 .triptych__label {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -891,7 +962,12 @@ p + p { margin-top: 1em; }
 }
 .riso-swatch--lime { background: var(--lime); color: var(--ink); }
 .riso-swatch--magenta { background: var(--magenta); color: var(--ink); }
-.riso-swatch--blackout { background: var(--blackout); color: var(--on-blackout-fg); }
+.riso-swatch--blackout {
+  background: var(--blackout);
+  color: var(--on-blackout-fg);
+  border: 1px solid var(--lime);
+}
+.riso-swatch--blackout .riso-swatch__code { color: var(--lime); }
 .riso-swatch__code {
   position: absolute;
   bottom: 1rem; left: 1rem;

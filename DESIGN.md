@@ -95,7 +95,26 @@ indices, runtimes, deadlines, project codes.
   contains at least one `.blackout` section. Stats and CTA are blackout;
   hero, services, and testimonial are paper.
 - **Spacing.** Vertical section padding `clamp(96px, 12vw, 184px)`.
-  Internal block gap `clamp(24px, 3vw, 56px)`.
+  Internal block gap `clamp(24px, 3vw, 56px)` exposed as
+  `--block-gap`; small variant `--block-gap-sm: clamp(20px, 2vw, 32px)`
+  exposed for `.actions` rows. **HTML must never inline `margin-top`** —
+  rhythm is enforced via adjacent-sibling rules in `site.css`:
+  - `.lede + .actions / + form / + .poster-tiles / + .team-grid /
+    + .editorial-3 / + .manifesto-wall / + .tab-block` →
+    `margin-top: var(--block-gap)`.
+  - `h1 + .lede`, `h2 + .lede` → `margin-top: clamp(1rem, 1.4vw, 1.4rem)`.
+  - `h2 + .editorial-3 / + .manifesto-wall / + .team-grid /
+    + .poster-tiles / + form / + .tab-block` → `margin-top: var(--block-gap)`.
+  - `.section > .container + .poster-tiles` → `margin-top: var(--block-gap)`.
+  - `h3 + .dim`, `.editorial-3 .dim` → `margin-top: 0.4rem`.
+  - `.signature + .actions, .lede + .actions, .pull-quote + .actions,
+    p + .actions, .editorial-3 + .actions, .eyebrow + .actions` →
+    `margin-top: var(--block-gap-sm)`.
+  - `.container--gap-top` modifier where two sibling `.container`s sit
+    inside the same section.
+  Triptych panels use modifier classes (`.triptych__panel--lime /
+  --paper-deep / --blackout`); riso swatches inside a triptych get
+  `margin-top: auto` automatically.
 - **No card chrome.** `.service-card` is replaced by `.poster-tile`:
   full-bleed background (`--lime` / `--magenta` / `--blackout`), oversized
   mono index, H2-scale service title, single-line copy, lime arrow link.
