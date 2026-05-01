@@ -34,12 +34,12 @@ const T = {
   'tab.messages': { en: 'Studio Line', zh: 'Studio Line' },
   'running.eyebrow': { en: "WHAT'S RUNNING", zh: 'WHAT’S RUNNING' },
   'running.current': {
-    en: 'Final packaging review · Tide & Tonic Day 18',
-    zh: '包装最终审阅 · Tide & Tonic 第 18 天',
+    en: 'Master files & IP transfer · Tide & Tonic launch week',
+    zh: '母文件与 IP 转让 · Tide & Tonic 上线周',
   },
   'running.deadline': {
-    en: 'DUE 04 / 22 · 10:00 AM ET',
-    zh: '截止 04 / 22 · 10:00 ET',
+    en: 'TODAY · 1:00 PM ET · 68 JAY ST',
+    zh: '今日 · 13:00 ET · 68 JAY ST',
   },
   'running.next': { en: 'NEXT THREE', zh: '接下来三步' },
   'journey.eyebrow': { en: 'The Runsheet', zh: '生产排程' },
@@ -90,6 +90,13 @@ interface Props {
 }
 
 type TabId = 'journey' | 'deliverables' | 'brand' | 'schedule' | 'billing' | 'documents' | 'messages'
+
+const TAB_IDS: TabId[] = ['journey', 'deliverables', 'brand', 'schedule', 'billing', 'documents', 'messages']
+function readInitialTab(): TabId {
+  if (typeof window === 'undefined') return 'journey'
+  const hash = window.location.hash.replace('#', '') as TabId
+  return TAB_IDS.includes(hash) ? hash : 'journey'
+}
 
 type StageContent =
   | { kind: 'info-grid'; rows: { label: TL; value: TL; emphasis?: 'success' | 'warning' | 'accent' }[] }
@@ -228,7 +235,7 @@ const STAGES: Stage[] = [
         { label: { en: 'Color proofs', zh: '色稿' }, value: { en: 'Round-2 approved · Pantone 5605 lift', zh: '第二轮通过 · Pantone 5605 微调' }, emphasis: 'success' },
         { label: { en: 'Hero film offline', zh: '主片离线剪辑' }, value: { en: '60s + 30s + 15s + 6s vertical', zh: '60秒 + 30秒 + 15秒 + 6秒竖版' }, emphasis: 'success' },
         { label: { en: 'OOH masters', zh: '户外大牌母版' }, value: { en: 'Subway · billboard · transit · all routed', zh: '地铁 · 户外大牌 · 交通 · 全部路由完成' }, emphasis: 'success' },
-        { label: { en: 'Brand Guidelines v1.0 sign-off', zh: 'Brand Guidelines v1.0 签字' }, value: { en: 'Review + approve by Apr 22', zh: '4 月 22 日前审阅并签字' }, emphasis: 'warning' },
+        { label: { en: 'Brand Guidelines v1.0 sign-off', zh: 'Brand Guidelines v1.0 签字' }, value: { en: 'Counter-signed Apr 22 · IP transfer today', zh: '4 月 22 日双方签字 · IP 转让今天交割' }, emphasis: 'success' },
       ]},
       { kind: 'documents', items: [
         { name: { en: 'Brand Guidelines v1.0', zh: 'Brand Guidelines v1.0' }, size: { en: 'PDF · 38 pages', zh: 'PDF · 38 页' }, action: true },
@@ -283,23 +290,87 @@ const STAGES: Stage[] = [
   },
 ]
 
-interface DeliverableRow { status: TL; title: string; subtitle: TL; rounds: number; revs: number; sku: number; price: string; accent?: boolean; notes?: TL; tone: 'lime' | 'magenta' | 'blackout' | 'paper-deep' }
+type Artifact = 'book' | 'can' | 'film' | 'billboard' | 'memo' | 'sheet'
+interface DeliverableRow { status: TL; title: string; subtitle: TL; rounds: number; revs: number; sku: number; price: string; accent?: boolean; notes?: TL; tone: 'lime' | 'magenta' | 'blackout' | 'paper-deep'; artifact: Artifact }
 
 const DELIVERABLES: DeliverableRow[] = [
-  { status: { en: 'In Approval', zh: '签字中' }, title: 'Brand Guidelines v1.0', subtitle: { en: 'Master identity doc · 38 pages', zh: '品牌识别母规范 · 38 页' }, rounds: 4, revs: 4, sku: 1, price: '$58,000', accent: true, notes: { en: 'Final sign-off blocks production master release.', zh: '最终签字是母文件交付的前置门。' }, tone: 'lime' },
-  { status: { en: 'Production', zh: '生产' }, title: 'Tide & Tonic Spritz · 12oz can', subtitle: { en: 'Packaging · 3 SKUs · NY ABC cleared', zh: '包装 · 3 个 SKU · NY 酒管局通过' }, rounds: 5, revs: 5, sku: 3, price: '$46,500', notes: { en: 'Pantone 5605 lift confirmed at the wet-proof stage.', zh: '湿样阶段确认了 Pantone 5605 的微调。' }, tone: 'magenta' },
-  { status: { en: 'Production', zh: '生产' }, title: 'Hero Film · 60s + cuts', subtitle: { en: 'Campaign film · 60s / 30s / 15s / 6s', zh: '战役主片 · 60秒 / 30秒 / 15秒 / 6秒' }, rounds: 3, revs: 2, sku: 4, price: '$38,000', notes: { en: 'Final color session at Final Frame on Apr 29.', zh: '4 月 29 日在 Final Frame 做最终调色。' }, tone: 'blackout' },
-  { status: { en: 'Routed', zh: '已发布通路' }, title: 'OOH Series · Subway + Brooklyn', subtitle: { en: 'Out-of-home · 4 placements', zh: '户外 · 4 个媒介' }, rounds: 2, revs: 2, sku: 4, price: '$22,400', notes: { en: 'Subway car-card, Bedford station, BK billboard, Williamsburg bridge.', zh: '地铁车厢卡、Bedford 站、布鲁克林大牌、威廉斯堡桥。' }, tone: 'paper-deep' },
-  { status: { en: 'Approved', zh: '已通过' }, title: 'Brand Strategy Doc · final', subtitle: { en: 'Strategy · audience + voice + system', zh: '策略 · 受众 + 语调 + 系统' }, rounds: 3, revs: 2, sku: 1, price: '$24,500', notes: { en: 'Audience: dinner-party hosts, mid-30s, NYC + Hudson Valley.', zh: '受众：晚宴主理人、35 岁上下、纽约 + 哈德逊河谷。' }, tone: 'lime' },
-  { status: { en: 'In Concept', zh: '概念中' }, title: 'Trade Marketing Toolkit', subtitle: { en: 'Sell sheet, retailer one-pager, shelf strip', zh: '销售单、零售单页、货架条' }, rounds: 1, revs: 0, sku: 3, price: '$11,200', notes: { en: 'Drafts due May 09 ahead of indie-grocer trade show.', zh: '5 月 9 日交稿，赶上独立超市行业展。' }, tone: 'magenta' },
+  { status: { en: 'In Approval', zh: '签字中' }, title: 'Brand Guidelines v1.0', subtitle: { en: 'Master identity doc · 38 pages', zh: '品牌识别母规范 · 38 页' }, rounds: 4, revs: 4, sku: 1, price: '$58,000', accent: true, notes: { en: 'Final sign-off blocks production master release.', zh: '最终签字是母文件交付的前置门。' }, tone: 'lime', artifact: 'book' },
+  { status: { en: 'Production', zh: '生产' }, title: 'Tide & Tonic Spritz · 12oz can', subtitle: { en: 'Packaging · 3 SKUs · NY ABC cleared', zh: '包装 · 3 个 SKU · NY 酒管局通过' }, rounds: 5, revs: 5, sku: 3, price: '$46,500', notes: { en: 'Pantone 5605 lift confirmed at the wet-proof stage.', zh: '湿样阶段确认了 Pantone 5605 的微调。' }, tone: 'magenta', artifact: 'can' },
+  { status: { en: 'Production', zh: '生产' }, title: 'Hero Film · 60s + cuts', subtitle: { en: 'Campaign film · 60s / 30s / 15s / 6s', zh: '战役主片 · 60秒 / 30秒 / 15秒 / 6秒' }, rounds: 3, revs: 2, sku: 4, price: '$38,000', notes: { en: 'Final color session at Final Frame on Apr 29.', zh: '4 月 29 日在 Final Frame 做最终调色。' }, tone: 'blackout', artifact: 'film' },
+  { status: { en: 'Routed', zh: '已发布通路' }, title: 'OOH Series · Subway + Brooklyn', subtitle: { en: 'Out-of-home · 4 placements', zh: '户外 · 4 个媒介' }, rounds: 2, revs: 2, sku: 4, price: '$22,400', notes: { en: 'Subway car-card, Bedford station, BK billboard, Williamsburg bridge.', zh: '地铁车厢卡、Bedford 站、布鲁克林大牌、威廉斯堡桥。' }, tone: 'paper-deep', artifact: 'billboard' },
+  { status: { en: 'Approved', zh: '已通过' }, title: 'Brand Strategy Doc · final', subtitle: { en: 'Strategy · audience + voice + system', zh: '策略 · 受众 + 语调 + 系统' }, rounds: 3, revs: 2, sku: 1, price: '$24,500', notes: { en: 'Audience: dinner-party hosts, mid-30s, NYC + Hudson Valley.', zh: '受众：晚宴主理人、35 岁上下、纽约 + 哈德逊河谷。' }, tone: 'lime', artifact: 'memo' },
+  { status: { en: 'In Concept', zh: '概念中' }, title: 'Trade Marketing Toolkit', subtitle: { en: 'Sell sheet, retailer one-pager, shelf strip', zh: '销售单、零售单页、货架条' }, rounds: 1, revs: 0, sku: 3, price: '$11,200', notes: { en: 'Drafts due May 09 ahead of indie-grocer trade show.', zh: '5 月 9 日交稿，赶上独立超市行业展。' }, tone: 'magenta', artifact: 'sheet' },
 ]
+
+function WorkArtifact({ kind }: { kind: Artifact }) {
+  switch (kind) {
+    case 'book': return (
+      <div className="pv-art pv-art--book" aria-hidden="true">
+        <div className="pv-art__book-spread">
+          <span>BRAND</span><span>BOOK</span>
+        </div>
+        <span className="pv-art__caption">v1.0 · 38pp</span>
+      </div>
+    )
+    case 'can': return (
+      <div className="pv-art pv-art--can" aria-hidden="true">
+        <div className="pv-art__can">
+          <span className="pv-art__can-top" />
+          <span className="pv-art__can-mark">T&amp;T</span>
+          <span className="pv-art__can-band">SPRITZ</span>
+        </div>
+        <span className="pv-art__caption">12 OZ · PMS 5605</span>
+      </div>
+    )
+    case 'film': return (
+      <div className="pv-art pv-art--film" aria-hidden="true">
+        <div className="pv-art__film-frame">
+          <span>01:00:00</span>
+          <span>—&nbsp;60s&nbsp;—</span>
+          <span>01:01:00</span>
+        </div>
+        <span className="pv-art__caption">HERO · 60s / 30s / 15s / 6s</span>
+      </div>
+    )
+    case 'billboard': return (
+      <div className="pv-art pv-art--billboard" aria-hidden="true">
+        <div className="pv-art__billboard">
+          <span className="pv-art__billboard-line">THE NEW</span>
+          <span className="pv-art__billboard-line pv-art__billboard-line--accent">DINNER PARTY.</span>
+        </div>
+        <span className="pv-art__caption">SUBWAY · BK · 4 PLACEMENTS</span>
+      </div>
+    )
+    case 'memo': return (
+      <div className="pv-art pv-art--memo" aria-hidden="true">
+        <ol className="pv-art__memo-list">
+          <li>AUDIENCE</li>
+          <li>VOICE</li>
+          <li>VISUAL SYSTEM</li>
+          <li>SOUND</li>
+        </ol>
+        <span className="pv-art__caption">STRATEGY · 24pp</span>
+      </div>
+    )
+    case 'sheet': return (
+      <div className="pv-art pv-art--sheet" aria-hidden="true">
+        <div className="pv-art__sheet-stack">
+          <span>SELL · 8.5×11</span>
+          <span>1-PG · 8.5×11</span>
+          <span>SHELF · 24×3</span>
+        </div>
+        <span className="pv-art__caption">TRADE · DRAFT · MAY 09</span>
+      </div>
+    )
+  }
+}
 
 interface AppointmentRow { when: TL; title: TL; where: TL; status: TL }
 const APPOINTMENTS: AppointmentRow[] = [
   { when: { en: 'Wed · Apr 22 · 10:00 AM', zh: '4 月 22 日（三）10:00' }, title: { en: 'Production review with Reese', zh: '与 Reese 的生产审阅通话' }, where: { en: 'Zoom', zh: 'Zoom' }, status: { en: 'Confirmed', zh: '已确认' } },
   { when: { en: 'Sun · Apr 26 · all day', zh: '4 月 26 日（日）全天' }, title: { en: 'Photo shoot — Brooklyn Navy Yard', zh: '摄影日 — 布鲁克林海军船坞' }, where: { en: 'On-set · Reese all day', zh: '现场 · Reese 全程' }, status: { en: 'Scheduled', zh: '已安排' } },
-  { when: { en: 'Tue · Apr 29 · 11:00 AM', zh: '4 月 29 日（二）11:00' }, title: { en: 'Final film color session — Final Frame', zh: '主片最终调色 — Final Frame' }, where: { en: 'Williamsburg', zh: '威廉斯堡' }, status: { en: 'Action needed', zh: '需要处理' } },
-  { when: { en: 'Wed · Apr 30 · 1:00 PM', zh: '4 月 30 日（三）13:00' }, title: { en: 'Master files & IP transfer signing', zh: '母文件与 IP 转让签字' }, where: { en: 'Aperture & Ink studio · 68 Jay St', zh: 'Aperture & Ink 工作室 · 68 Jay Street' }, status: { en: 'Scheduled', zh: '已安排' } },
+  { when: { en: 'Tue · Apr 29 · 11:00 AM', zh: '4 月 29 日（二）11:00' }, title: { en: 'Final film color session — Final Frame', zh: '主片最终调色 — Final Frame' }, where: { en: 'Williamsburg', zh: '威廉斯堡' }, status: { en: 'Confirmed', zh: '已确认' } },
+  { when: { en: 'Wed · Apr 30 · 1:00 PM', zh: '4 月 30 日（三）13:00' }, title: { en: 'Master files & IP transfer signing', zh: '母文件与 IP 转让签字' }, where: { en: 'Aperture & Ink studio · 68 Jay St', zh: 'Aperture & Ink 工作室 · 68 Jay Street' }, status: { en: 'Action needed', zh: '需要处理' } },
   { when: { en: 'Thu · May 01 · 10:00 AM', zh: '5 月 1 日（四）10:00' }, title: { en: 'Master files released + photos', zh: '母文件交付 + 合影' }, where: { en: 'Aperture & Ink studio', zh: 'Aperture & Ink 工作室' }, status: { en: 'Scheduled', zh: '已安排' } },
   { when: { en: 'Sat · May 17 · 11:00 AM', zh: '5 月 17 日（六）11:00' }, title: { en: 'Post-launch toast at the studio', zh: '工作室上线庆祝' }, where: { en: 'Aperture & Ink studio', zh: 'Aperture & Ink 工作室' }, status: { en: 'Optional', zh: '可选' } },
 ]
@@ -348,6 +419,21 @@ const BRAND_STATS: BrandStat[] = [
   { big: { en: '24', zh: '24' }, small: { en: 'NYC indie grocers committed', zh: '已确认上架的纽约独立超市' } },
 ]
 
+interface Swatch { name: TL; pantone: string; hex: string; bg: string; ink: 'paper' | 'ink' }
+const TIDE_PALETTE: Swatch[] = [
+  { name: { en: 'Tide Green', zh: 'Tide 绿' }, pantone: 'PMS 5605 C', hex: '#1F3A2A', bg: '#1F3A2A', ink: 'paper' },
+  { name: { en: 'Brick', zh: '砖红' }, pantone: 'PMS 7522 C', hex: '#A85A40', bg: '#A85A40', ink: 'paper' },
+  { name: { en: 'Cream', zh: '奶油' }, pantone: 'PMS 9143 C', hex: '#EFE6D2', bg: '#EFE6D2', ink: 'ink' },
+  { name: { en: 'Off-Black', zh: '近黑' }, pantone: 'PMS Black 6 C', hex: '#0E1413', bg: '#0E1413', ink: 'paper' },
+]
+
+interface SkuMock { sku: TL; vol: TL; abv: TL; tone: 'spritz' | 'tonic' | 'aperitif' }
+const SKU_MOCKS: SkuMock[] = [
+  { sku: { en: 'Spritz', zh: 'Spritz' }, vol: { en: '12 oz · 4-pk', zh: '12 oz · 四罐装' }, abv: { en: '6.8% ABV', zh: '6.8% 酒精度' }, tone: 'spritz' },
+  { sku: { en: 'Tonic', zh: 'Tonic' }, vol: { en: '12 oz · 4-pk', zh: '12 oz · 四罐装' }, abv: { en: '7.1% ABV', zh: '7.1% 酒精度' }, tone: 'tonic' },
+  { sku: { en: 'Aperitif', zh: 'Aperitif' }, vol: { en: '8 oz · single', zh: '8 oz · 单罐' }, abv: { en: '11.4% ABV', zh: '11.4% 酒精度' }, tone: 'aperitif' },
+]
+
 interface MessageRow { speaker: TL; time: TL; body: TL; me?: boolean }
 const MESSAGES: MessageRow[] = [
   { speaker: { en: 'Reese', zh: 'Reese' }, time: { en: 'Apr 16 · 4:12 PM', zh: '4 月 16 日 · 16:12' },
@@ -371,14 +457,19 @@ const MESSAGES: MessageRow[] = [
 ]
 
 const NEXT_THREE: TL[] = [
-  { en: 'Photo shoot · Brooklyn Navy Yard · Apr 26', zh: '摄影日 · 布鲁克林海军船坞 · 4 月 26 日' },
-  { en: 'Final color session · Final Frame · Apr 29', zh: '主片最终调色 · Final Frame · 4 月 29 日' },
-  { en: 'Master files & IP transfer · Apr 30', zh: '母文件 & IP 转让 · 4 月 30 日' },
+  { en: 'Master files released + photos · May 01 · 10:00 AM', zh: '母文件交付 + 合影 · 5 月 1 日 · 10:00' },
+  { en: 'Trade press kit · 14 outlets · May 03', zh: '行业媒体物料 · 14 家 · 5 月 3 日' },
+  { en: 'Post-launch toast · Aperture & Ink studio · May 17', zh: '上线庆祝 · Aperture & Ink 工作室 · 5 月 17 日' },
 ]
 
 export default function Dashboard({ member, tenant, onSignOut }: Props) {
-  const [tab, setTab] = useState<TabId>('journey')
+  const [tab, setTabState] = useState<TabId>(readInitialTab)
   const [lang, setLangState] = useState<Lang>(readInitialLang)
+
+  function setTab(next: TabId) {
+    setTabState(next)
+    try { window.history.replaceState(null, '', `#${next}`) } catch {}
+  }
 
   function toggleLang() {
     const next: Lang = lang === 'zh' ? 'en' : 'zh'
@@ -616,6 +707,7 @@ function WorkWallView({ lang }: { lang: Lang }) {
               <span>WORK NO. {String(i + 1).padStart(2, '0')}</span>
               <span>{p.price}</span>
             </div>
+            <WorkArtifact kind={p.artifact} />
             <h3 className="pv-wall__title">{p.title}</h3>
             <p className="pv-wall__sub">{tl(lang, p.subtitle)}</p>
             <div className="pv-wall__specs">
@@ -667,6 +759,69 @@ function MarkView({ lang }: { lang: Lang }) {
             <p>{tl(lang, c.sub)}</p>
           </article>
         ))}
+      </section>
+
+      {/* Brand color palette — locked Tide & Tonic swatches with hex + Pantone. */}
+      <section className="pv-palette" aria-label={lang === 'zh' ? '品牌色板' : 'Brand colour palette'}>
+        <header className="pv-palette__head">
+          <span className="pv-eyebrow">{lang === 'zh' ? '色板 · 已锁定' : 'Palette · Locked'}</span>
+          <h3>{lang === 'zh' ? '四色核心 · Pantone 定稿' : 'Four-colour core · Pantone-locked'}</h3>
+        </header>
+        <div className="pv-palette__grid">
+          {TIDE_PALETTE.map((s, i) => (
+            <article key={i} className={`pv-swatch pv-swatch--${s.ink}`} style={{ background: s.bg }}>
+              <span className="pv-swatch__no">{String(i + 1).padStart(2, '0')}</span>
+              <strong className="pv-swatch__name">{tl(lang, s.name)}</strong>
+              <dl className="pv-swatch__meta">
+                <div><dt>HEX</dt><dd>{s.hex}</dd></div>
+                <div><dt>PMS</dt><dd>{s.pantone}</dd></div>
+              </dl>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* SKU mock-ups — three 12oz can silhouettes drawn in CSS. */}
+      <section className="pv-skus" aria-label={lang === 'zh' ? '包装 SKU' : 'Packaging SKUs'}>
+        <header className="pv-palette__head">
+          <span className="pv-eyebrow">{lang === 'zh' ? '包装 · 三个 SKU' : 'Packaging · Three SKUs'}</span>
+          <h3>{lang === 'zh' ? '货架就绪样' : 'Shelf-ready proofs'}</h3>
+        </header>
+        <div className="pv-skus__grid">
+          {SKU_MOCKS.map((m, i) => (
+            <article key={i} className={`pv-sku pv-sku--${m.tone}`}>
+              <div className="pv-sku__can" aria-hidden="true">
+                <span className="pv-sku__brand">Tide<br />&amp; Tonic</span>
+                <span className="pv-sku__variant">{tl(lang, m.sku)}</span>
+                <span className="pv-sku__abv">{tl(lang, m.abv)}</span>
+              </div>
+              <div className="pv-sku__caption">
+                <strong>{tl(lang, m.sku)}</strong>
+                <span>{tl(lang, m.vol)} · {tl(lang, m.abv)}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Type specimen — show the locked stack in actual settings. */}
+      <section className="pv-specimen" aria-label={lang === 'zh' ? '字体样张' : 'Type specimen'}>
+        <header className="pv-palette__head">
+          <span className="pv-eyebrow">{lang === 'zh' ? '字体堆栈 · 已锁定' : 'Type stack · Locked'}</span>
+          <h3>{lang === 'zh' ? '两个声音 · 一个家族' : 'Two voices · One family'}</h3>
+        </header>
+        <div className="pv-specimen__grid">
+          <article className="pv-specimen__panel pv-specimen__panel--display">
+            <span className="pv-specimen__label">DISPLAY · BRICOLAGE 800</span>
+            <span className="pv-specimen__big">Tide &amp; Tonic.</span>
+            <span className="pv-specimen__line">{lang === 'zh' ? '主标题 · 海报头条 · 罐体大字' : 'Hero · poster · can wordmark'}</span>
+          </article>
+          <article className="pv-specimen__panel pv-specimen__panel--mono">
+            <span className="pv-specimen__label">PRODUCTION · GEIST MONO 500</span>
+            <span className="pv-specimen__mono">PMS 5605 C / 12 oz / 6.8% ABV<br/>SKU 01 · BATCH 04 · 2026-04</span>
+            <span className="pv-specimen__line">{lang === 'zh' ? '生产代码 · 后侧文案 · 行业刊物' : 'Production codes · back-panel · trade press'}</span>
+          </article>
+        </div>
       </section>
     </div>
   )

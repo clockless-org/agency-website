@@ -267,7 +267,7 @@
   text-transform: uppercase;
 }
 .pv-wall__title {
-  margin: 56px 0 0.3rem;
+  margin: 0.6rem 0 0.3rem;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(1.6rem, 2.4vw, 2.2rem);
@@ -275,6 +275,201 @@
   letter-spacing: -0.02em;
   font-variation-settings: "opsz" 60;
 }
+
+/* Work Wall artifact glyphs — CSS-only typographic mockups per deliverable. */
+.pv-art {
+  margin: 48px 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pv-art__caption {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+/* book — paired pages with thick spine and stacked label */
+.pv-art__book-spread {
+  position: relative;
+  height: 92px;
+  display: grid;
+  grid-template-columns: 1fr 4px 1fr;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+}
+.pv-art__book-spread::before,
+.pv-art__book-spread::after {
+  content: "";
+  position: absolute;
+  inset: 8px 12px;
+  border: 1px solid var(--ink);
+  opacity: 0.18;
+}
+.pv-art__book-spread::after { inset: 14px 22px; }
+.pv-art__book-spread > span:nth-child(2) { background: var(--ink); grid-column: 2; height: 100%; }
+.pv-art__book-spread > span:first-child,
+.pv-art__book-spread > span:last-child {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 36;
+}
+
+/* can — 12oz silhouette with band + abv */
+.pv-art__can {
+  position: relative;
+  width: 88px;
+  height: 130px;
+  margin-left: 4px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.pv-art__can-top {
+  position: absolute;
+  top: -5px; left: 8px; right: 8px;
+  height: 6px;
+  background: var(--ink);
+}
+.pv-art__can-mark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 36;
+}
+.pv-art__can-band {
+  width: 100%;
+  text-align: center;
+  padding: 3px 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+}
+.pv-art__can::before,
+.pv-art__can::after {
+  content: "";
+  position: absolute;
+  left: 6px; right: 6px;
+  height: 1px;
+  background: var(--ink);
+  opacity: 0.4;
+}
+.pv-art__can::before { top: 14px; }
+.pv-art__can::after  { bottom: 14px; }
+
+/* film — 16:9 frame with timecode bookends */
+.pv-art__film-frame {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  height: 92px;
+  padding: 0 12px;
+  border: 1px solid var(--lime);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  color: var(--lime);
+}
+.pv-art__film-frame > span:nth-child(2) {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: var(--on-blackout-fg);
+  font-variation-settings: "opsz" 36;
+}
+
+/* billboard — 2-line poster set in display */
+.pv-art__billboard {
+  height: 92px;
+  padding: 14px 16px;
+  border: 1px solid currentColor;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+.pv-art__billboard-line {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 36;
+}
+.pv-art__billboard-line--accent { color: var(--magenta); }
+
+/* memo — numbered list as table-of-contents teaser */
+.pv-art__memo-list {
+  list-style: none;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  display: grid;
+  gap: 4px;
+  counter-reset: memo;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.pv-art__memo-list li::before {
+  content: counter(memo, decimal-leading-zero) " ";
+  counter-increment: memo;
+  color: var(--ink-soft);
+  margin-right: 8px;
+}
+.pv-art__memo-list li {
+  border-bottom: 1px dashed var(--rule);
+  padding-bottom: 3px;
+}
+.pv-art__memo-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+/* sheet — 3 stacked rectangles with mono labels */
+.pv-art__sheet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.pv-art__sheet-stack > span {
+  padding: 6px 10px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
+.pv-art__sheet-stack > span:nth-child(3) {
+  width: 70%;
+  align-self: flex-end;
+}
+
+/* Tile-tone overrides for artifact contrast. */
+.pv-wall__tile--blackout .pv-art { color: var(--on-blackout-fg); }
+.pv-wall__tile--blackout .pv-art__caption { color: var(--lime); opacity: 1; }
+.pv-wall__tile--blackout .pv-art__billboard { color: var(--on-blackout-fg); }
+.pv-wall__tile--paper-deep .pv-art__billboard-line { color: var(--ink); }
+.pv-wall__tile--paper-deep .pv-art__billboard-line--accent { color: var(--magenta); }
 .pv-wall__sub {
   margin: 0;
   font-family: var(--font-mono);
@@ -395,6 +590,226 @@
   font-variation-settings: "opsz" 36;
 }
 .pv-mark-card p { margin: 0; line-height: 1.55; color: var(--ink-soft); }
+
+/* Brand palette / SKU mocks / type specimen — Mark tab brand-book extensions. */
+.pv-palette__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: clamp(28px, 3vw, 40px) 0 clamp(20px, 2vw, 28px);
+}
+.pv-palette__head h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-variation-settings: "opsz" 36;
+}
+
+.pv-palette__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+@media (max-width: 880px) { .pv-palette__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .pv-palette__grid { grid-template-columns: 1fr; } }
+
+.pv-swatch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: clamp(20px, 2.4vw, 32px);
+  min-height: 200px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.pv-swatch--paper { color: var(--paper); }
+.pv-swatch--ink { color: var(--ink); }
+.pv-swatch__no {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  opacity: 0.7;
+}
+.pv-swatch__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 36;
+}
+.pv-swatch__meta {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+.pv-swatch__meta > div {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  border-top: 1px solid currentColor;
+  padding: 4px 0;
+}
+.pv-swatch__meta dt { margin: 0; opacity: 0.7; letter-spacing: 0.18em; }
+.pv-swatch__meta dd { margin: 0; font-weight: 500; letter-spacing: 0.04em; }
+
+.pv-skus__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  background: var(--paper-deep);
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+@media (max-width: 720px) { .pv-skus__grid { grid-template-columns: 1fr; } }
+.pv-sku {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  padding: clamp(36px, 4vw, 56px) clamp(20px, 2vw, 32px);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.pv-sku__can {
+  position: relative;
+  width: 144px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 12px;
+  border: 1px solid var(--ink);
+}
+.pv-sku--spritz   .pv-sku__can { background: #1F3A2A; color: #EFE6D2; }
+.pv-sku--tonic    .pv-sku__can { background: #EFE6D2; color: #1F3A2A; border-color: #1F3A2A; }
+.pv-sku--aperitif .pv-sku__can { background: #A85A40; color: #EFE6D2; border-color: #0E1413; }
+.pv-sku__can::before {
+  content: "";
+  position: absolute;
+  top: -6px; left: 14px; right: 14px;
+  height: 8px;
+  background: currentColor;
+  opacity: 0.85;
+}
+.pv-sku__can::after {
+  content: "";
+  position: absolute;
+  inset: 8px 6px;
+  border: 1px solid currentColor;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.pv-sku__brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-align: center;
+  font-variation-settings: "opsz" 60;
+}
+.pv-sku__variant {
+  padding: 4px 12px;
+  background: currentColor;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.pv-sku--spritz   .pv-sku__variant { color: #1F3A2A; }
+.pv-sku--tonic    .pv-sku__variant { color: #EFE6D2; }
+.pv-sku--aperitif .pv-sku__variant { color: #A85A40; }
+.pv-sku__abv {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.pv-sku__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.pv-sku__caption strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 24;
+}
+.pv-sku__caption span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.pv-specimen__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+@media (max-width: 720px) { .pv-specimen__grid { grid-template-columns: 1fr; } }
+.pv-specimen__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(28px, 3vw, 44px);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.pv-specimen__panel--display { background: var(--paper); color: var(--ink); }
+.pv-specimen__panel--mono    { background: var(--blackout); color: var(--on-blackout-fg); }
+.pv-specimen__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.pv-specimen__big {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 96;
+}
+.pv-specimen__mono {
+  font-family: var(--font-mono);
+  font-size: clamp(0.86rem, 1.2vw, 1rem);
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  color: var(--lime);
+}
+.pv-specimen__line {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-top: 1px solid currentColor;
+  padding-top: 0.8rem;
+  opacity: 0.75;
+}
 
 /* ─────────────── CALENDAR ─────────────── */
 .pv-cal {
