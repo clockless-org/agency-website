@@ -33,7 +33,7 @@
   border-bottom: 1px solid var(--blackout);
 }
 .pv-running__inner {
-  width: min(calc(100% - 48px), 1180px);
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
   padding: clamp(40px, 5vw, 72px) 0 clamp(28px, 3vw, 40px);
   display: grid;
@@ -114,7 +114,7 @@
   z-index: 30;
 }
 .pv-header__top {
-  width: min(calc(100% - 48px), 1180px);
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -212,7 +212,7 @@
 .pv-contact:hover, .pv-back:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 .pv-tabs {
-  width: min(calc(100% - 48px), 1180px);
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
   display: flex;
   gap: 0;
@@ -261,7 +261,7 @@
   background: var(--paper);
 }
 .pv-tabpanel {
-  width: min(calc(100% - 48px), 1180px);
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
   padding: clamp(40px, 5vw, 72px) 0 clamp(56px, 6vw, 96px);
 }
@@ -272,7 +272,7 @@
   border-top: 1px solid var(--blackout);
 }
 .pv-footer__inner {
-  width: min(calc(100% - 48px), 1180px);
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
   margin: 0 auto;
   padding: 28px 0;
   display: flex;

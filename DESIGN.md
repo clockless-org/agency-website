@@ -64,6 +64,22 @@ monograph, and a DUMBO risograph zine — all at once.
 --font-mono:    "Geist Mono"
 ```
 
+**Every entry-point HTML must `<link>` the actual font stylesheet,** not
+just the preconnect. Without the stylesheet, the page silently falls
+back to PingFang SC (CJK) or Hiragino, which destroys the W+K /
+Pentagram tone the Manifesto depends on. The required `<link>` is:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist+Mono:wght@400;500&display=swap" />
+```
+
+This must appear in `index.html`, `about/index.html`,
+`services/index.html`, `testimonials/index.html`, `contact/index.html`,
+**and** `portal/index.html`. Any new entry point copies this block
+verbatim or the typography drifts.
+
 The variable opsz axis on Bricolage covers everything from 12px legal copy
 to 200px hero — same family does small body and giant manifesto headline.
 The third voice is **mono**, used for production callouts: case study
@@ -85,6 +101,25 @@ indices, runtimes, deadlines, project codes.
 
 - **12-column** grid. Container width 1180px. Body copy stays inside;
   hero, marquee, and case-study covers overflow `.container`.
+- **Layout tokens — single source of truth for site AND portal.**
+
+  ```
+  --page-max:    1180px   /* canonical page width */
+  --page-gutter: 24px     /* hard gutter, never less */
+  --container:   var(--page-max)   /* legacy alias only */
+  ```
+
+  Every horizontally-bounded surface — `.container` on landing pages,
+  `.pv-running__inner`, `.pv-header__top`, `.pv-tabs`, `.pv-tabpanel`,
+  `.pv-footer__inner` on the portal — uses the **same** formula:
+
+  ```css
+  width: min(var(--page-max), calc(100% - var(--page-gutter) * 2));
+  ```
+
+  This is why `/` → `/portal/` does not shift the brand even by a pixel
+  at any viewport. **Never** hand-write `min(calc(100% - 48px), 1180px)`
+  in a new rule — always go through the tokens.
 - **Sharp edges.** `border-radius: 0` everywhere except `.lang-toggle`
   (single 999px pill, intentional contrast).
 - **Hairlines, not cards.** `1px solid var(--rule)` for separators. **No
